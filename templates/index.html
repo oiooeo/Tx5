@@ -7,14 +7,6 @@
     <title>Document</title>
   </head>
   <body>
-    <input type="text" name="name" id="name" />
-    <input type="text" name="photo" id="photo" />
-    <input type="text" name="mbti" id="mbti" />
-    <input type="text" name="advantage" id="advantage" />
-    <input type="text" name="co_style" id="co_style" />
-    <input type="text" name="desc" id="desc" />
-    <input type="text" name="blog_url" id="blog_url" />
-    <button onclick="posting()">create</button>
     <button onclick="listing()">load data</button>
     <ul id="list"></ul>
     <script>
@@ -22,31 +14,6 @@
         listing();
       };
       const list = document.getElementById("list");
-
-      function posting() {
-        const name = document.querySelector("#name").value;
-        const photo_url = document.querySelector("#photo").value;
-        const mbti = document.querySelector("#mbti").value;
-        const advantage = document.querySelector("#advantage").value;
-        const co_style = document.querySelector("#co_style").value;
-        const desc = document.querySelector("#desc").value;
-        const blog_url = document.querySelector("#blog_url").value;
-
-        let formData = new FormData();
-        formData.append("name", name);
-        formData.append("photo_url", photo_url);
-        formData.append("mbti", mbti);
-        formData.append("advantage", advantage);
-        formData.append("co_style", co_style);
-        formData.append("desc", desc);
-        formData.append("blog_url", blog_url);
-
-        fetch("/api/member", { method: "POST", body: formData })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-          });
-      }
 
       async function listing() {
         const res = await fetch("/api/");
@@ -57,7 +24,7 @@
           const card = document.createElement("li");
           temp_html = `
             <div>
-              <p>${member.name}</p>
+              <a href='/member/${member.name}'><p>${member.name}</p></a>
               <p>${member.photo_url}</p>
               <p>${member.mbti}</p>
               <p>${member.advantage}</p>

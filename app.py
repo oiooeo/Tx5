@@ -21,6 +21,15 @@ db = client['team-intro-app']
 def home():
     return render_template('index.html')
 
+@app.route('/manage/create')
+def create():
+    return render_template('create.html')
+
+## Member page
+@app.route('/member/<string:name>')
+def member(name):
+    return render_template('member.html',name=name)
+
 
 ##### api #####
 ## create member
