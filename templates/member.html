@@ -8,6 +8,8 @@
   </head>
   <body>
     {{name}}
+    <a href="/manage/update/{{name}}">수정하기</a>
+    <button onclick="deleteMember()">삭제</button>
     <ul id="list"></ul>
     <script>
       window.onload = (e) => {
@@ -17,13 +19,12 @@
       async function listing() {
         const res = await fetch(`/api/member/{{name}}`);
         const json = await res.json();
-        console.log(json);
         list.innerHTML = "";
         const member = json["result"];
         const card = document.createElement("li");
         temp_html = `
             <div>
-              <a href='/manage/update/{{name}}'>수정하기</a>
+              
               <p>${member.name}</p>
               <p>${member.photo_url}</p>
               <p>${member.mbti}</p>
@@ -35,6 +36,19 @@
           `;
         card.innerHTML = temp_html;
         list.appendChild(card);
+      }
+
+      async function deleteMember() {
+        try {
+          const res = await fetch(`/api/member/{{name}}`, {
+            method: "DELETE",
+          });
+          if (res.status === 200) {
+            window.location.href = "/";
+          }
+        } catch (e) {
+          alert(e);
+        }
       }
     </script>
   </body>
