@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify,make_response
+from flask import Flask, render_template, request, jsonify,make_response,redirect,url_for
 from pymongo import MongoClient
 
 # flask
@@ -12,23 +12,30 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGODB_URI)
 print(client)
 db = client['team-intro-app']
+member_col = db.member
 
 
 ##### flask app #####
 
 ## HOME page
 @app.route('/')
-def home():
+def home_page():
     return render_template('index.html')
 
 @app.route('/manage/create')
-def create():
+def create_page():
     return render_template('create.html')
 
 ## Member page
 @app.route('/member/<string:name>')
-def member(name):
-    return render_template('member.html',name=name)
+def member_page(name):
+    try:
+      member = member_col.find_one({'name':str(name)}, {'_id': False})
+      if(member is None):
+        return redirect(url_for('/'))
+      return render_template('member.html',name=name)
+    except Exception as e:
+      return redirect(url_for('home_page'))
 
 
 ##### api #####
@@ -58,19 +65,19 @@ def create_member():
       return jsonify({'msg': 'error'},404)
 
 ## get member data
-@app.route("/api/member/<string:Name>", methods=["GET"])
-def get_member(Name):
+@app.route("/api/member/<string:name>", methods=["GET"])
+def get_member(name):
     try:
-      member = list(db.member.find({'name':str(Name)}, {'_id': False}).limit(1))
+      member = member_col.find_one({'name':str(name)}, {'_id': False})
       return jsonify({'result': member})
     except Exception as e:
       return make_response(jsonify({'meg': 'error'}),404)
 
 ## get all member data
 @app.route("/api/", methods=["GET"])
-def get_members():
+def get_all_members():
     try:
-      allMember = list(db.member.find({}, {'_id': False}))
+      allMember = list(member_col.find({}, {'_id': False}))
       return jsonify({'result': allMember})
     except Exception as e:
       return make_response(jsonify({'meg': 'error'}),404)
