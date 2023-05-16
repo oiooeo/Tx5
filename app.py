@@ -26,6 +26,16 @@ def home_page():
 def create_page():
     return render_template('create.html')
 
+@app.route('/manage/update/<string:name>')
+def update_page(name):
+    try:
+      member = member_col.find_one({'name':str(name)}, {'_id': False})
+      if(member is None):
+        return redirect(url_for('/'))
+      return render_template('update.html',name=name)
+    except Exception as e:
+      return redirect(url_for('home_page'))
+
 ## Member page
 @app.route('/member/<string:name>')
 def member_page(name):
@@ -64,14 +74,38 @@ def create_member():
     except Exception as e:
       return jsonify({'msg': 'error'},404)
 
-## get member data
-@app.route("/api/member/<string:name>", methods=["GET"])
+## get member / update member
+@app.route("/api/member/<string:name>", methods=["GET","PUT"])
 def get_member(name):
-    try:
-      member = member_col.find_one({'name':str(name)}, {'_id': False})
-      return jsonify({'result': member})
-    except Exception as e:
-      return make_response(jsonify({'meg': 'error'}),404)
+    if request.method == 'GET':
+      try:
+        member = member_col.find_one({'name':str(name)}, {'_id': False})
+        return jsonify({'result': member})
+      except Exception as e:
+        return make_response(jsonify({'meg': 'error'}),404)
+    elif request.method == 'PUT':
+       try:
+          name = request.form['name']
+          photo_url = request.form['photo_url']
+          mbti = request.form['mbti'].upper()
+          advantage = request.form['advantage']
+          co_style = request.form['co_style']
+          desc = request.form['desc']
+          blog_url = request.form['blog_url']
+          doc = {
+              'name': name,
+              'photo_url': photo_url,
+              'mbti': mbti,
+              'advantage' : advantage,
+              'co_style': co_style,
+              'desc': desc,
+              'blog_url' : blog_url
+          }
+          member_col.replace_one({'name':str(name)},doc)
+          return jsonify({'msg': 'success'},200)
+       except Exception as e:
+          return make_response(jsonify({'meg': 'error'}),404)
+       
 
 ## get all member data
 @app.route("/api/", methods=["GET"])
