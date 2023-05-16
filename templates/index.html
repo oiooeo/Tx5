@@ -17,26 +17,30 @@
       const list = document.getElementById("list");
 
       async function listing() {
-        const res = await fetch("/api/member");
-        const json = await res.json();
-        console.log(json);
-        list.innerHTML = "";
-        json["result"].map((member) => {
-          const card = document.createElement("li");
-          temp_html = `
-            <div>
-              <a href='/member/${member.name}'><p>${member.name}</p></a>
-              <p>${member.photo_url}</p>
-              <p>${member.mbti}</p>
-              <p>${member.advantage}</p>
-              <p>${member.co_style}</p>
-              <p>${member.desc}</p>
-              <p>${member.blog_url}</p>
-            </div>
-          `;
-          card.innerHTML = temp_html;
-          list.appendChild(card);
-        });
+        try {
+          const res = await fetch("/api/member");
+          const json = await res.json();
+          console.log(json);
+          list.innerHTML = "";
+          json["result"].map((member) => {
+            const card = document.createElement("li");
+            temp_html = `
+              <div>
+                <a href='/member/${member.name}'><p>${member.name}</p></a>
+                <p>${member.photo_url}</p>
+                <p>${member.mbti}</p>
+                <p>${member.advantage}</p>
+                <p>${member.co_style}</p>
+                <p>${member.desc}</p>
+                <p>${member.blog_url}</p>
+              </div>
+            `;
+            card.innerHTML = temp_html;
+            list.appendChild(card);
+          });
+        } catch (e) {
+          alert(e);
+        }
       }
     </script>
   </body>
