@@ -16,7 +16,7 @@
       const list = document.getElementById("list");
 
       async function listing() {
-        const res = await fetch("/api/");
+        const res = await fetch("/api/member");
         const json = await res.json();
         console.log(json);
         list.innerHTML = "";

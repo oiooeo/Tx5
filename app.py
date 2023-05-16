@@ -50,40 +50,49 @@ def member_page(name):
 
 ##### api #####
 ## create member
-@app.route("/api/member", methods=["POST"])
+@app.route("/api/member", methods=["GET","POST"])
 def create_member():
-    try:
-      name = request.form['name']
-      photo_url = request.form['photo_url']
-      mbti = request.form['mbti'].upper()
-      advantage = request.form['advantage']
-      co_style = request.form['co_style']
-      desc = request.form['desc']
-      blog_url = request.form['blog_url']
-      doc = {
-          'name': name,
-          'photo_url': photo_url,
-          'mbti': mbti,
-          'advantage' : advantage,
-          'co_style': co_style,
-          'desc': desc,
-          'blog_url' : blog_url
-      }
-      db['member'].insert_one(doc)
-      return jsonify({'msg': 'success'},200)
-    except Exception as e:
-      return jsonify({'msg': 'error'},404)
+    if request.method == 'GET':
+      try:
+        allMember = list(member_col.find({}, {'_id': False}))
+        return jsonify({'result': allMember})
+      except Exception as e:
+        return make_response(jsonify({'meg': 'error'}),404)
+    elif request.method == 'POST':
+      try:
+        name = request.form['name']
+        photo_url = request.form['photo_url']
+        mbti = request.form['mbti'].upper()
+        advantage = request.form['advantage']
+        co_style = request.form['co_style']
+        desc = request.form['desc']
+        blog_url = request.form['blog_url']
+        doc = {
+            'name': name,
+            'photo_url': photo_url,
+            'mbti': mbti,
+            'advantage' : advantage,
+            'co_style': co_style,
+            'desc': desc,
+            'blog_url' : blog_url
+        }
+        db['member'].insert_one(doc)
+        return jsonify({'msg': 'success'},200)
+      except Exception as e:
+        return jsonify({'msg': 'error'},404)
 
 ## get member / update member
 @app.route("/api/member/<string:name>", methods=["GET","PUT"])
 def get_member(name):
     if request.method == 'GET':
+      print('get')
       try:
         member = member_col.find_one({'name':str(name)}, {'_id': False})
         return jsonify({'result': member})
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
     elif request.method == 'PUT':
+       print('put')
        try:
           name = request.form['name']
           photo_url = request.form['photo_url']
@@ -102,19 +111,10 @@ def get_member(name):
               'blog_url' : blog_url
           }
           member_col.replace_one({'name':str(name)},doc)
-          return jsonify({'msg': 'success'},200)
+          return make_response(jsonify({'meg': 'success'}),200)
        except Exception as e:
           return make_response(jsonify({'meg': 'error'}),404)
        
-
-## get all member data
-@app.route("/api/", methods=["GET"])
-def get_all_members():
-    try:
-      allMember = list(member_col.find({}, {'_id': False}))
-      return jsonify({'result': allMember})
-    except Exception as e:
-      return make_response(jsonify({'meg': 'error'}),404)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5050, debug=True)
