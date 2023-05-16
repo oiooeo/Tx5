@@ -94,7 +94,6 @@ def get_member(name):
     elif request.method == 'PUT':
       print('put')
       try:
-        name = request.form['name']
         photo_url = request.form['photo_url']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
@@ -102,7 +101,6 @@ def get_member(name):
         desc = request.form['desc']
         blog_url = request.form['blog_url']
         doc = {
-            'name': name,
             'photo_url': photo_url,
             'mbti': mbti,
             'advantage' : advantage,
@@ -110,7 +108,7 @@ def get_member(name):
             'desc': desc,
             'blog_url' : blog_url
         }
-        member_col.replace_one({'name':str(name)},doc)
+        member_col.update_one({'name':str(name)},{'$set': doc})
         return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
