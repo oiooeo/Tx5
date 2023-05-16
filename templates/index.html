@@ -197,7 +197,34 @@
                 cursor: pointer;
             }
 
-            .btn:hover {
+            .delete-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background-image: url(https://i.postimg.cc/CKXqdRNR/delete-button.png);
+                filter: contrast(0);
+                width: 35px;
+                height: 35px;
+                background-position: center;
+                background-size: cover;
+            }
+
+            .edit-btn {
+                position: absolute;
+                top: 22px;
+                right: 70px;
+                background-image: url(https://i.postimg.cc/65qprMTF/edit.png);
+                filter: contrast(0);
+                width: 30px;
+                height: 30px;
+                background-position: center;
+                background-size: cover;
+            }
+
+            .btn:hover,
+            .close-btn:hover,
+            .delete-btn:hover,
+            .edit-btn:hover {
                 box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
             }
 
@@ -270,6 +297,8 @@
                                 </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
+                            <a class="delete-btn js-delete-modal"></a>
+                            <a class="edit-btn js-edit-modal"></a>
                         </div>
                     </div>
 
@@ -308,6 +337,8 @@
                                 </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
+                            <a class="delete-btn js-delete-modal"></a>
+                            <a class="edit-btn js-edit-modal"></a>
                         </div>
                     </div>
 
@@ -346,6 +377,8 @@
                                 </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
+                            <a class="delete-btn js-delete-modal"></a>
+                            <a class="edit-btn js-edit-modal"></a>
                         </div>
                     </div>
 
@@ -384,6 +417,8 @@
                                 </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
+                            <a class="delete-btn js-delete-modal"></a>
+                            <a class="edit-btn js-edit-modal"></a>
                         </div>
                     </div>
 
@@ -422,6 +457,8 @@
                                 </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
+                            <a class="delete-btn js-delete-modal"></a>
+                            <a class="edit-btn js-edit-modal"></a>
                         </div>
                     </div>
                 </div>
