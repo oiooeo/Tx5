@@ -43,20 +43,23 @@
       };
       const list = document.getElementById("list");
       async function listing() {
-        const res = await fetch(`/api/member/{{name}}`);
-        const json = await res.json();
-        console.log(json);
-        const member = json["result"];
-        document.querySelector("#name").value = member.name;
-        document.querySelector("#photo_url").value = member.photo_url;
-        document.querySelector("#mbti").value = member.mbti;
-        document.querySelector("#advantage").value = member.advantage;
-        document.querySelector("#co_style").value = member.co_style;
-        document.querySelector("#desc").value = member.desc;
-        document.querySelector("#blog_url").value = member.blog_url;
+        try {
+          const res = await fetch(`/api/member/{{name}}`);
+          const json = await res.json();
+          const member = json["result"];
+          document.querySelector("#name").value = member.name;
+          document.querySelector("#photo_url").value = member.photo_url;
+          document.querySelector("#mbti").value = member.mbti;
+          document.querySelector("#advantage").value = member.advantage;
+          document.querySelector("#co_style").value = member.co_style;
+          document.querySelector("#desc").value = member.desc;
+          document.querySelector("#blog_url").value = member.blog_url;
+        } catch(e) {
+          alert(e);
+        }
       }
       
-      function update() {
+      async function update() {
         const name = document.querySelector("#name").value;
         const photo_url = document.querySelector("#photo_url").value;
         const mbti = document.querySelector("#mbti").value;
@@ -75,11 +78,16 @@
         formData.append("desc", desc);
         formData.append("blog_url", blog_url);
 
-        fetch("/api/member/{{name}}", { method: "PUT", body: formData })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-          });
+        try {
+          const res = await fetch("/api/member/{{name}}", { method: "PUT", body: formData })
+          if(res.status === 200){
+            window.location.href = '/member/{{name}}'
+          } else {
+            console.log(`error ${res.status}`);
+          }
+        } catch(e) {
+          alert(e);
+        }
       }
     </script>
   </body>
