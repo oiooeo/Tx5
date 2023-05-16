@@ -62,3 +62,41 @@ body {
 .container.modal-open .modal {
   top: 0;
 }
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.modal .photo {
+  align-self: flex-start;
+  margin-right: 20px;
+}
+
+.modal .name {
+  font-weight: bold;
+}
+
+.modal .body {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.modal .document {
+  list-style-type: none;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.modal .document li {
+  margin-bottom: 10px;
+}
+
+.modal .btn.js-close-modal {
+  margin-top: 20px;
+  align-self: flex-end;
+}
