@@ -4,11 +4,13 @@ from flask import Flask, render_template,session, request, jsonify,make_response
 from pymongo import MongoClient
 from argon2 import PasswordHasher
 
+# load environment variable
+load_dotenv()
 # flask
 app = Flask(__name__)
-app.secret_key = 'w5n2k365j522jlnnvewkjoew'
+app.secret_key = os.getenv('SECRET_KEY')
 # mongodb
-load_dotenv()
+
 MONGODB_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGODB_URI)
 print('MongodbClient: ',client)
