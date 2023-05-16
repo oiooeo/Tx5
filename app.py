@@ -17,15 +17,17 @@ member_col = db.member
 
 ##### flask app #####
 
-## HOME page
+## HOME Page
 @app.route('/')
 def home_page():
     return render_template('index.html')
 
+## Create Page
 @app.route('/manage/create')
 def create_page():
     return render_template('create.html')
 
+## Update Page
 @app.route('/manage/update/<string:name>')
 def update_page(name):
     try:
@@ -36,7 +38,7 @@ def update_page(name):
     except Exception as e:
       return redirect(url_for('home_page'))
 
-## Member page
+## Member Page
 @app.route('/member/<string:name>')
 def member_page(name):
     try:
@@ -49,7 +51,8 @@ def member_page(name):
 
 
 ##### api #####
-## create member
+
+## Get all member / Create member
 @app.route("/api/member", methods=["GET","POST"])
 def create_member():
     if request.method == 'GET':
@@ -81,7 +84,7 @@ def create_member():
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
 
-## get member / update member
+## Get member / Update member / Delete member
 @app.route("/api/member/<string:name>", methods=["GET","PUT","DELETE"])
 def get_member(name):
     if request.method == 'GET':
@@ -120,6 +123,6 @@ def get_member(name):
         return make_response(jsonify({'meg': 'error'}),404)
     
        
-
+##### main #####
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5050, debug=True)
