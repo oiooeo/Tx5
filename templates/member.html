@@ -19,10 +19,11 @@
         const json = await res.json();
         console.log(json);
         list.innerHTML = "";
-        json["result"].map((member) => {
-          const card = document.createElement("li");
-          temp_html = `
+        const member = json["result"];
+        const card = document.createElement("li");
+        temp_html = `
             <div>
+              <a href='/manage/update/{{name}}'>수정하기</a>
               <p>${member.name}</p>
               <p>${member.photo_url}</p>
               <p>${member.mbti}</p>
@@ -32,9 +33,8 @@
               <p>${member.blog_url}</p>
             </div>
           `;
-          card.innerHTML = temp_html;
-          list.appendChild(card);
-        });
+        card.innerHTML = temp_html;
+        list.appendChild(card);
       }
     </script>
   </body>
