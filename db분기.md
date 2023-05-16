@@ -1,10 +1,8 @@
 # install
 
 1. python -m venv venv
-2. source ./venv/Scripts/activate
+2. source ./venv/Scripts/activate (or) source ./venv/bin/activate
 3. pip install flask pymongo python-dotenv argon2-cffi
-
-
 
 ## SiteMap
 
@@ -14,8 +12,6 @@
 | 멤버 생성 페이지     | /manage/create |
 | 멤버 업데이트 페이지 | /manage/{name} |
 | 멤버 페이지          | /member/{name} |
-
-
 
 ## API
 
@@ -27,4 +23,3 @@
 | /api/member/{name}     | PUT    | 단일 멤버 업데이트하기                  |
 | /api/member/{name}     | DELETE | 단일 멤버 삭제하기                      |
 | /api/validation/{name} | POST   | 세션을 통해 멤버 업데이트 권한 가져오기 |
-
