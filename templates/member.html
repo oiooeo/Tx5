@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>{{name}}의 페이지</title>
   </head>
   <body>
     {{name}}
-    <a href="/manage/update/{{name}}">수정하기</a>
+    <a href="/manage/update/{{name}}">멤버 수정하기</a>
     <form method="post" action="/api/member" onsubmit="deleteMember(event)">
       <div>
         <label for="pass">Password:</label>
@@ -20,7 +20,7 @@
           required
         />
       </div>
-      <input type="submit" value="delete" />
+      <input type="submit" value="멤버 삭제하기" />
     </form>
     <ul id="list"></ul>
     <script>
@@ -37,7 +37,6 @@
           const card = document.createElement("li");
           temp_html = `
               <div>
-                
                 <p>${member.name}</p>
                 <p>${member.photo_url}</p>
                 <p>${member.mbti}</p>
