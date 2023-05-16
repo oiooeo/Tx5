@@ -7,67 +7,70 @@
     <title>Document</title>
   </head>
   <body>
-    <div>
-      <label for="name">Name: </label>
-      <input type="text" name="name" id="name" />
-    </div>
-    <div>
-      <label for="name">Photo: </label>
-      <input type="text" name="photo" id="photo" />
-    </div>
-    <div>
-      <label for="name">MBTI: </label>
-      <input type="text" name="mbti" id="mbti" />
-    </div>
-    <div>
-      <label for="name">Advantage: </label>
-      <input type="text" name="advantage" id="advantage" />
-    </div>
-    <div>
-      <label for="name">Style: </label>
-      <input type="text" name="co_style" id="co_style" />
-    </div>
-    <div>
-      <label for="name">Description: </label>
-      <input type="text" name="desc" id="desc" />
-    </div>
-    <div>
-      <label for="name">Blog_url: </label>
-      <input type="text" name="blog_url" id="blog_url" />
-    </div>
-    <button onclick="posting()">create</button>
+    <form method="post" action="{{url_for('create_member')}}">
+      <div>
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name" />
+      </div>
+      <div>
+        <label for="name">Photo: </label>
+        <input type="text" name="photo_url" id="photo_url" />
+      </div>
+      <div>
+        <label for="name">MBTI: </label>
+        <input type="text" name="mbti" id="mbti" />
+      </div>
+      <div>
+        <label for="name">Advantage: </label>
+        <input type="text" name="advantage" id="advantage" />
+      </div>
+      <div>
+        <label for="name">Style: </label>
+        <input type="text" name="co_style" id="co_style" />
+      </div>
+      <div>
+        <label for="name">Description: </label>
+        <input type="text" name="desc" id="desc" />
+      </div>
+      <div>
+        <label for="name">Blog_url: </label>
+        <input type="text" name="blog_url" id="blog_url" />
+      </div>
+      <!-- <button onclick="posting()">생성</button> -->
+      <input type="submit" value="create" />
+    </form>
     <script>
-      function posting() {
-        const name = document.querySelector("#name").value;
-        const photo_url = document.querySelector("#photo").value;
-        const mbti = document.querySelector("#mbti").value;
-        const advantage = document.querySelector("#advantage").value;
-        const co_style = document.querySelector("#co_style").value;
-        const desc = document.querySelector("#desc").value;
-        const blog_url = document.querySelector("#blog_url").value;
-        document.querySelector("#name").value = "";
-        document.querySelector("#photo").value = "";
-        document.querySelector("#mbti").value = "";
-        document.querySelector("#advantage").value = "";
-        document.querySelector("#co_style").value = "";
-        document.querySelector("#desc").value = "";
-        document.querySelector("#blog_url").value = "";
+      // function posting() {
+      //   const name = document.querySelector("#name").value;
+      //   const photo_url = document.querySelector("#photo_url").value;
+      //   const mbti = document.querySelector("#mbti").value;
+      //   const advantage = document.querySelector("#advantage").value;
+      //   const co_style = document.querySelector("#co_style").value;
+      //   const desc = document.querySelector("#desc").value;
+      //   const blog_url = document.querySelector("#blog_url").value;
+      //   document.querySelector("#name").value = "";
+      //   document.querySelector("#photo").value = "";
+      //   document.querySelector("#mbti").value = "";
+      //   document.querySelector("#advantage").value = "";
+      //   document.querySelector("#co_style").value = "";
+      //   document.querySelector("#desc").value = "";
+      //   document.querySelector("#blog_url").value = "";
 
-        let formData = new FormData();
-        formData.append("name", name);
-        formData.append("photo_url", photo_url);
-        formData.append("mbti", mbti);
-        formData.append("advantage", advantage);
-        formData.append("co_style", co_style);
-        formData.append("desc", desc);
-        formData.append("blog_url", blog_url);
+      //   let formData = new FormData();
+      //   formData.append("name", name);
+      //   formData.append("photo_url", photo_url);
+      //   formData.append("mbti", mbti);
+      //   formData.append("advantage", advantage);
+      //   formData.append("co_style", co_style);
+      //   formData.append("desc", desc);
+      //   formData.append("blog_url", blog_url);
 
-        fetch("/api/member", { method: "POST", body: formData })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-          });
-      }
+      //   fetch("/api/member", { method: "POST", body: formData })
+      //     .then((res) => res.json())
+      //     .then((data) => {
+      //       console.log(data);
+      //     });
+      // }
     </script>
   </body>
 </html>
