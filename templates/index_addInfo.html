@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 
@@ -22,14 +21,6 @@
             letter-spacing: 2px;
         }
 
-        .wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 50px;
-        }
-
         .mytitle {
             width: 100%;
             height: 160px;
@@ -47,7 +38,26 @@
             margin-bottom: 50px;
         }
 
-        .topDiv{
+        #back_btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-image: url(https://i.postimg.cc/SsFvYypM/left-arrow-circle-regular-24.png);
+            width: 35px;
+            height: 35px;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .topDiv {
             margin: 40px auto 0px auto;
         }
 
@@ -59,8 +69,8 @@
             margin-top: 30px;
         }
 
-        .btn-outline-secondary{
-        margin-top: 20px;
+        .btn-outline-secondary {
+            margin-top: 20px;
 
         }
     </style>
@@ -68,19 +78,20 @@
 
 <body>
     <div class="mytitle">
+        <a id="back_btn" class="back_button" role="button" href="index.html"></a>
         <h1>𝐓 𝐱 𝟓</h1>
     </div>
 
     <div class="wrap">
-       
-            <div class="form-floating mb-3 topDiv">
-                <input type="text" class="form-control" id="floatingInput" placeholder="이름을 입력하세요">
-                <label for="floatingInput">이름을 입력하세요</label>
-              </div>
-              <div class="form-floating">
-                <input type="text" class="form-control" id="floatingPassword" placeholder="MBTI를 입력하세요">
-                <label for="floatingPassword">MBTI를 입력하세요</label>
-              </div>
+
+        <div class="form-floating mb-3 topDiv">
+            <input type="text" class="form-control" id="floatingInput" placeholder="이름을 입력하세요">
+            <label for="floatingInput">이름을 입력하세요</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingPassword" placeholder="MBTI를 입력하세요">
+            <label for="floatingPassword">MBTI를 입력하세요</label>
+        </div>
 
 
         <div class="mb-3">
