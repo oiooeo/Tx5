@@ -62,7 +62,7 @@ def member_page(name):
 
 ## Get all member / Create member
 @app.route("/api/member", methods=["GET","POST"])
-def create_member():
+def get_all_or_create_member():
     if request.method == 'GET':
       try:
         allMember = list(member_col.find({}, {'_id': False}))
@@ -97,7 +97,7 @@ def create_member():
 
 ## Get member / Update member / Delete member
 @app.route("/api/member/<string:name>", methods=["GET","PUT","DELETE"])
-def get_member(name):
+def handle_member(name):
     if request.method == 'GET':
       try:
         member = member_col.find_one({'name':str(name)}, {'_id': False})
@@ -136,7 +136,7 @@ def get_member(name):
         return make_response(jsonify({'meg': 'error'}),404)
       
 @app.route("/api/validation/<string:name>", methods=["POST"])
-def validation(name):
+def validate_member(name):
     try:
       password = request.form['password']
 
