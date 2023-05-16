@@ -55,7 +55,7 @@ def create_member():
     if request.method == 'GET':
       try:
         allMember = list(member_col.find({}, {'_id': False}))
-        return jsonify({'result': allMember})
+        return make_response(jsonify({'result': allMember}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
     elif request.method == 'POST':
@@ -77,43 +77,50 @@ def create_member():
             'blog_url' : blog_url
         }
         db['member'].insert_one(doc)
-        return jsonify({'msg': 'success'},200)
+        return make_response(jsonify({'url': '/member/'+name}),200)
       except Exception as e:
-        return jsonify({'msg': 'error'},404)
+        return make_response(jsonify({'meg': 'error'}),404)
 
 ## get member / update member
-@app.route("/api/member/<string:name>", methods=["GET","PUT"])
+@app.route("/api/member/<string:name>", methods=["GET","PUT","DELETE"])
 def get_member(name):
     if request.method == 'GET':
       print('get')
       try:
         member = member_col.find_one({'name':str(name)}, {'_id': False})
-        return jsonify({'result': member})
+        return make_response(jsonify({'result': member}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
     elif request.method == 'PUT':
-       print('put')
-       try:
-          name = request.form['name']
-          photo_url = request.form['photo_url']
-          mbti = request.form['mbti'].upper()
-          advantage = request.form['advantage']
-          co_style = request.form['co_style']
-          desc = request.form['desc']
-          blog_url = request.form['blog_url']
-          doc = {
-              'name': name,
-              'photo_url': photo_url,
-              'mbti': mbti,
-              'advantage' : advantage,
-              'co_style': co_style,
-              'desc': desc,
-              'blog_url' : blog_url
-          }
-          member_col.replace_one({'name':str(name)},doc)
-          return make_response(jsonify({'meg': 'success'}),200)
-       except Exception as e:
-          return make_response(jsonify({'meg': 'error'}),404)
+      print('put')
+      try:
+        name = request.form['name']
+        photo_url = request.form['photo_url']
+        mbti = request.form['mbti'].upper()
+        advantage = request.form['advantage']
+        co_style = request.form['co_style']
+        desc = request.form['desc']
+        blog_url = request.form['blog_url']
+        doc = {
+            'name': name,
+            'photo_url': photo_url,
+            'mbti': mbti,
+            'advantage' : advantage,
+            'co_style': co_style,
+            'desc': desc,
+            'blog_url' : blog_url
+        }
+        member_col.replace_one({'name':str(name)},doc)
+        return make_response(jsonify({'meg': 'success'}),200)
+      except Exception as e:
+        return make_response(jsonify({'meg': 'error'}),404)
+    elif request.method == 'DELETE':
+      try:
+        member_col.delete_one({'name':str(name)})
+        return make_response(jsonify({'meg': 'success'}),200)
+      except Exception as e:
+        return make_response(jsonify({'meg': 'error'}),404)
+    
        
 
 if __name__ == '__main__':
