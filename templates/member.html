@@ -9,7 +9,19 @@
   <body>
     {{name}}
     <a href="/manage/update/{{name}}">수정하기</a>
-    <button onclick="deleteMember()">삭제</button>
+    <form method="post" action="/api/member" onsubmit="deleteMember(event)">
+      <div>
+        <label for="pass">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          minlength="8"
+          required
+        />
+      </div>
+      <input type="submit" value="delete" />
+    </form>
     <ul id="list"></ul>
     <script>
       window.onload = (e) => {
@@ -42,12 +54,15 @@
         }
       }
 
-      async function deleteMember() {
+      async function deleteMember(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
         try {
-          const res = await fetch(`/api/member/{{name}}`, {
+          const res = await fetch("/api/member/{{name}}", {
             method: "DELETE",
+            body: formData,
           });
-          window.location.href = "/";
+          if (res.status == 200) window.location.href = "/";
         } catch (e) {
           alert(e);
         }
