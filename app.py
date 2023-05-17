@@ -85,7 +85,7 @@ def get_all_or_create_member():
         allMember = list(member_col.find({}, {'_id': False}))
         return make_response(jsonify({'result': allMember}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': 'error'}),404)
+        return make_response(jsonify({'meg': str(e)}),404)
     elif request.method == 'POST':
       try:
         id = str(uuid.uuid4())
