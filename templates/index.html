@@ -51,7 +51,20 @@
 
         margin-bottom: 70px;
       }
-
+      button {
+        position: absolute;
+        top: 60%;
+        right: 25px;
+        background-image: url(https://i.postimg.cc/15xdxJ5f/reload.png);
+        border: none;
+        background-color: transparent;
+        filter: contrast(0);
+        width: 30px;
+        height: 30px;
+        background-position: center;
+        background-size: cover;
+        cursor: pointer;
+      }
       #add_btn {
         position: absolute;
         top: 20px;
@@ -258,7 +271,7 @@
       시간 약속 잘 지키기 ! <br />
     </div>
 
-    <button onclick="listing()">다시 불러오기</button>
+    <button onclick="listing()"></button>
     <ul id="list"></ul>
 
     <div class="mycards">
@@ -429,21 +442,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-      $('.js-click-modal').click(function () {
-        var container = $(this).closest('.container');
-        container.addClass('modal-open');
-        container.siblings().fadeOut(300); // 애니메이션 속도 조정
-      });
-
-      $('.js-close-modal').click(function () {
-        var container = $(this).closest('.container');
-        container.removeClass('modal-open');
-        setTimeout(function () {
-          container.siblings().fadeIn(300); // 애니메이션 속도 조정
-        }, 100); // 딜레이 시간 조정
-      });
-      3;
-
       window.onload = (e) => {
         listing();
       };
@@ -458,18 +456,54 @@
           json['result'].map((member) => {
             const card = document.createElement('li');
             temp_html = `
-                <div>
-                  <a href='/member/${member.id}'><p>${member.name}</p></a>
-                  <p>${member.photo_url}</p>
-                  <p>${member.mbti}</p>
-                  <p>${member.advantage}</p>
-                  <p>${member.co_style}</p>
-                  <p>${member.desc}</p>
-                  <p>${member.blog_url}</p>
-                </div>
-              `;
+                        <div class="container">
+                          <a class="btn js-click-modal">
+                            <div class="card h-100">
+                              <img
+                                src="${member.photo_url}"
+                                class="card-img-top"
+                              />
+                              <div class="card-body">
+                                <label class="card-title">${member.name}</label>
+                              </div>
+                            </div>
+                          </a>
+                          <div class="modal">
+                            <div class="name">${member.name}</div>
+                            <div class="body">
+                              <div class="photo">
+                                <img src="${member.photo_url}" />
+                              </div>
+                              <ul class="document">
+                                <li class="MBTI">MBTI | ${member.mbti}</li>
+                                <li class="pros">장점 | ${member.advantage}</li>
+                                <li class="myStyle">협업스타일 | ${member.co_style}</li>
+                                <li class="introduce">내 소개 | ${member.desc}</li>
+                                <li class="blog">블로그 주소 | ${member.blog_url}</li>
+                              </ul>
+                            </div>
+                            <a class="close-btn js-close-modal">Close</a>
+                            <a class="delete-btn js-delete-modal"></a>
+                            <a class="edit-btn js-edit-modal"></a>
+                          </div>
+                        </div>
+                        `;
             card.innerHTML = temp_html;
             list.appendChild(card);
+
+            $('.js-click-modal').click(function () {
+              var container = $(this).closest('.container');
+              container.addClass('modal-open');
+              container.siblings().fadeOut(300); // 애니메이션 속도 조정
+            });
+
+            $('.js-close-modal').click(function () {
+              var container = $(this).closest('.container');
+              container.removeClass('modal-open');
+              setTimeout(function () {
+                container.siblings().fadeIn(300); // 애니메이션 속도 조정
+              }, 100); // 딜레이 시간 조정
+            });
           });
         } catch (e) {
           alert(e);
