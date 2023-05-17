@@ -177,6 +177,11 @@ def validate_member(id):
       return make_response(jsonify({'meg': 'error'}),404)
        
 
+
+class ImageUploadError(Exception):    
+    def __init__(self):
+        super().__init__('이미지 업로드에 실패했습니다.')
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_IMAGE_EXTENSIONS
@@ -203,7 +208,7 @@ def upload_image(id,image):
         response_payload = json.loads(response_payload)
         return response_payload['body']
     except Exception as e:
-       return {'error: ': str(e)}
+        raise ImageUploadError
   
 ##### main #####
 if __name__ == '__main__':
