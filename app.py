@@ -89,27 +89,26 @@ def get_all_or_create_member():
     elif request.method == 'POST':
       try:
         id = str(uuid.uuid4())
-        if 'image' not in request.files:
-          return make_response(jsonify({'meg': 'error'}),404)
-        
         image = request.files['image']
-        print(image)
-        filename =image.filename
-        if not allowed_file(filename):
-           return make_response(jsonify({'meg': 'Invalid file extension'}),404)
-        payload = {
-          'id': id,
-          'extension': filename.rsplit('.', 1)[1],
-          'data': base64.b64encode(image.read()).decode('utf-8')
-        }
-        response = lambda_clinet.invoke(
-          FunctionName='save-image-to-s3',
-          InvocationType='RequestResponse',
-          Payload= json.dumps(payload)
-        )
-        response_payload = response['Payload'].read().decode('utf-8')
-        response_payload = json.loads(response_payload)
-        photo_url = response_payload['body']
+        if (is_empty_file(image)):
+          photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
+        else:
+          filename =image.filename
+          if not allowed_file(filename):
+            return make_response(jsonify({'meg': 'Invalid file extension'}),404)
+          payload = {
+            'id': id,
+            'extension': filename.rsplit('.', 1)[1],
+            'data': base64.b64encode(image.read()).decode('utf-8')
+          }
+          response = lambda_clinet.invoke(
+            FunctionName='save-image-to-s3',
+            InvocationType='RequestResponse',
+            Payload= json.dumps(payload)
+          )
+          response_payload = response['Payload'].read().decode('utf-8')
+          response_payload = json.loads(response_payload)
+          photo_url = response_payload['body']
         name = request.form['name']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
@@ -192,6 +191,8 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_IMAGE_EXTENSIONS
 
+def is_empty_file(file_storage):
+    return file_storage.filename == '' and file_storage.content_type == 'application/octet-stream'
 
 ##### main #####
 if __name__ == '__main__':
