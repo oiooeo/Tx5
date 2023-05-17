@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{name}}의 페이지</title>
+  </head>
+  <body>
+    {{name}}
+    <a href="/manage/update/{{id}}">멤버 수정하기</a>
+    <form method="post" action="/api/member" onsubmit="deleteMember(event)">
+      <div>
+        <label for="pass">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          minlength="8"
+          required
+        />
+      </div>
+      <input type="submit" value="멤버 삭제하기" />
+    </form>
+    <ul id="list"></ul>
+    <script>
+      window.onload = (e) => {
+        listing();
+      };
+      const list = document.getElementById("list");
+      async function listing() {
+        try {
+          const res = await fetch(`/api/member/{{id}}`);
+          const json = await res.json();
+          list.innerHTML = "";
+          const member = json["result"];
+          const card = document.createElement("li");
+          temp_html = `
+              <div>
+                <p>${member.name}</p>
+                <p>${member.photo_url}</p>
+                <p>${member.mbti}</p>
+                <p>${member.advantage}</p>
+                <p>${member.co_style}</p>
+                <p>${member.desc}</p>
+                <p>${member.blog_url}</p>
+              </div>
+            `;
+          card.innerHTML = temp_html;
+          list.appendChild(card);
+        } catch (e) {
+          alert(e);
+        }
+      }
+
+      async function deleteMember(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        try {
+          const res = await fetch("/api/member/{{id}}", {
+            method: "DELETE",
+            body: formData,
+          });
+          if (res.status == 200) window.location.href = "/";
+        } catch (e) {
+          alert(e);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,444 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+    />
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" /> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <title>Tx5</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+    />
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
 
-        * {
-            font-family: 'IBM Plex Sans KR', sans-serif;
-            letter-spacing: 2px;
-        }
+      * {
+        font-family: 'IBM Plex Sans KR', sans-serif;
+        letter-spacing: 2px;
+      }
 
-        .mytitle {
-            width: 100%;
-            height: 160px;
+      .mytitle {
+        width: 100%;
+        height: 160px;
 
-            background-color: #78ad80;
-            color: #ffffff;
-            font-size: xx-large;
-            font-weight: 500;
+        background-color: #78ad80;
+        color: #ffffff;
+        font-size: xx-large;
+        font-weight: 500;
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-            margin-bottom: 70px;
-        }
+        margin-bottom: 70px;
+      }
 
-        #add_btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-image: url(https://i.postimg.cc/PfmRQkxQ/plus-circle-regular-24.png);
-            width: 40px;
-            height: 40px;
-            background-position: center;
-            background-size: cover;
-        }
+      #add_btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-image: url(https://i.postimg.cc/PfmRQkxQ/plus-circle-regular-24.png);
+        width: 40px;
+        height: 40px;
+        background-position: center;
+        background-size: cover;
+      }
 
-        .team {
-            text-align: center;
-            width: 70%;
-            padding: 10px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 30px;
-            margin-bottom: 50px;
-            background: linear-gradient(to right, #f9ff8c8b, #76ff7b85);
-            color: #444444;
-            border-radius: 15px;
-        }
-
-        .card {
-            width: 100%;
-            padding: 5px;
-        }
-
-        #cards-box .card-img-top {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .card-body {
-            text-align: center;
-            margin-top: 10px;
-            padding: auto;
-        }
-
-        .card-title {
-            background-color: #8a8a8a;
-            padding: 5px;
-            border-radius: 2px;
-            font-size: medium;
-        }
-
-        /* 여기부터 현서님 css */
-
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .wrap {
-            display: flex;
-            justify-content: center;
-        }
-
-        .container>.btn {
-            margin: 10px;
-            padding: 20px 40px;
-            font-size: 30px;
-            border-radius: 40px;
-            display: flex;
-            float: left;
-        }
-
-        .modal {
-            background: #fff;
-            width: 100%;
-            height: 90%;
-            margin-top: 160px;
-            padding: 0;
-            transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1);
-            top: 100%;
-            position: fixed;
-            left: 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .modal .photo {
-            align-self: flex-start;
-            margin-right: 20px;
-        }
-
-        .modal .name {
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-            font: 300 24px Lato;
-            font-weight: bold;
-            position: relative;
-        }
-
-        .modal .body {
-            padding: 20px;
-            font: 300 16px Lato;
-            display: flex;
-            align-items: flex-start;
-            margin-top: 20px;
-        }
-
-        .modal .document {
-            list-style-type: none;
-            padding: 0;
-            margin-left: 20px;
-            text-align: center;
-        }
-
-        .modal .document li {
-            margin-bottom: 10px;
-        }
-
-        .btn {
-            /* background: linear-gradient(to right, #dce35b, #45b649); */
-            padding: 10px 25px;
-            display: inline-block;
-            border-radius: 20px;
-            margin: 20px 0;
-            color: #fff;
-            position: relative;
-            transition: all 0.4s ease;
-            cursor: pointer;
-        }
-
-        .close-btn {
-            background: linear-gradient(to right, #eff583a1, #8ed59087);
-            padding: 10px 25px;
-            display: inline-block;
-            border-radius: 25px;
-            margin: 20px 0;
-            color: #fff;
-            position: relative;
-            transition: all 0.4s ease;
-            cursor: pointer;
-        }
-
-        .delete-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-image: url(https://i.postimg.cc/CKXqdRNR/delete-button.png);
-            filter: contrast(0);
-            width: 35px;
-            height: 35px;
-            background-position: center;
-            background-size: cover;
-        }
-
-        .edit-btn {
-            position: absolute;
-            top: 22px;
-            right: 70px;
-            background-image: url(https://i.postimg.cc/65qprMTF/edit.png);
-            filter: contrast(0);
-            width: 30px;
-            height: 30px;
-            background-position: center;
-            background-size: cover;
-        }
-
-        .btn:hover,
-        .close-btn:hover,
-        .delete-btn:hover,
-        .edit-btn:hover {
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .container.modal-open .modal {
-            top: 0;
-        }
+      .team {
+        text-align: center;
+        width: 70%;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px;
+        margin-bottom: 50px;
+        background: linear-gradient(to right, #f9ff8c8b, #76ff7b85);
+        color: #444444;
+        border-radius: 15px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="mytitle">
-        <h1>𝐓 𝐱 𝟓</h1>
-        <a id="add_btn" class="add_button" role="button" href="index_addinfo.html"></a>
+      <h1>𝐓 𝐱 𝟓</h1>
+      <a
+        id="add_btn"
+        class="add_button"
+        role="button"
+        href="/manage/create"
+      ></a>
     </div>
 
     <div class="team">
-        ✦ MBTI T 5명의 모임 ✦ <br /> <br />
-        📍 목표 📍 <br />
-        프로젝트 잘 끝내기 <br />
-        능력 짱 개발자 되기 <br /> <br />
-        --------------------------------------------- <br /> <br />
-        🤙🏻 우리 팀의 약속 🤙🏻 <br />
-        시간 약속 잘 지키기 ! <br />
+      ✦ MBTI T 5명의 모임 ✦ <br />
+      <br />
+      📍 목표 📍 <br />
+      프로젝트 잘 끝내기 <br />
+      능력 짱 개발자 되기 <br />
+      <br />
+      --------------------------------------------- <br />
+      <br />
+      🤙🏻 우리 팀의 약속 🤙🏻 <br />
+      시간 약속 잘 지키기 ! <br />
     </div>
-
-
-    <div class="mycards">
-        <div class="row row-cols-md-5" id="cards-box">
-            <div class="wrap">
-                <div class="container">
-                    <a class="btn js-click-modal">
-                        <div class="card h-100">
-                            <img src="https://i.postimg.cc/6Qm113X5/jeon.png" class="card-img-top" />
-                            <div class="card-body">
-                                <label class="card-title">전동헌</label>
-                            </div>
-
-                        </div>
-                    </a>
-                    <div class="modal">
-                        <div class="name">전동헌</div>
-                        <div class="body">
-                            <div class="photo">
-                                <img src="https://i.postimg.cc/6Qm113X5/jeon.png" />
-                            </div>
-                            <ul class="document">
-                                <li class="MBTI">MBTI | ENTP</li>
-                                <li class="pros">장점 | 튼튼하다</li>
-                                <li class="myStyle">
-                                    협업스타일 | 적극 참여하는 스타일
-                                </li>
-                                <li class="introduce">
-                                    내 소개 | 안녕하세요 ㅇㅇㅇ 입니다
-                                </li>
-                                <li class="blog">
-                                    블로그 주소 | htttp://dddd.com
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="close-btn js-close-modal">Close</a>
-                        <a class="delete-btn js-delete-modal"></a>
-                        <a class="edit-btn js-edit-modal"></a>
-                    </div>
-                </div>
-
-                <div class="container">
-                    <a class="btn js-click-modal">
-                        <div class="card h-100">
-                            <img src="https://i.postimg.cc/PxvFGjXb/robot.png" class="card-img-top" />
-                            <div class="card-body">
-                                <label class="card-title">양현서</label>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="modal">
-                        <div class="name">양현서</div>
-                        <div class="body">
-                            <div class="photo">
-                                <img src="https://i.postimg.cc/PxvFGjXb/robot.png" />
-                            </div>
-                            <ul class="document">
-                                <li class="MBTI">MBTI | ENTP</li>
-                                <li class="pros">장점 | 튼튼하다</li>
-                                <li class="myStyle">
-                                    협업스타일 | 적극 참여하는 스타일
-                                </li>
-                                <li class="introduce">
-                                    내 소개 | 안녕하세요 ㅇㅇㅇ 입니다
-                                </li>
-                                <li class="blog">
-                                    블로그 주소 | htttp://dddd.com
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="close-btn js-close-modal">Close</a>
-                        <a class="delete-btn js-delete-modal"></a>
-                        <a class="edit-btn js-edit-modal"></a>
-                    </div>
-                </div>
-
-                <div class="container">
-                    <a class="btn js-click-modal">
-                        <div class="card h-100">
-                            <img src="https://i.postimg.cc/8zwYM4Xv/choi.png" class="card-img-top" />
-                            <div class="card-body">
-                                <label class="card-title">최윤서</label>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="modal">
-                        <div class="name">최윤서</div>
-                        <div class="body">
-                            <div class="photo">
-                                <img src="https://i.postimg.cc/8zwYM4Xv/choi.png" />
-                            </div>
-                            <ul class="document">
-                                <li class="MBTI">MBTI | ENTP</li>
-                                <li class="pros">장점 | 튼튼하다</li>
-                                <li class="myStyle">
-                                    협업스타일 | 적극 참여하는 스타일
-                                </li>
-                                <li class="introduce">
-                                    내 소개 | 안녕하세요 ㅇㅇㅇ 입니다
-                                </li>
-                                <li class="blog">
-                                    블로그 주소 | htttp://dddd.com
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="close-btn js-close-modal">Close</a>
-                        <a class="delete-btn js-delete-modal"></a>
-                        <a class="edit-btn js-edit-modal"></a>
-                    </div>
-                </div>
-
-                <div class="container">
-                    <a class="btn js-click-modal">
-                        <div class="card h-100">
-                            <img src="https://i.postimg.cc/TPw49bB4/hwang.png" class="card-img-top" />
-                            <div class="card-body">
-                                <label class="card-title">황태규</label>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="modal">
-                        <div class="name">황태규</div>
-                        <div class="body">
-                            <div class="photo">
-                                <img src="https://i.postimg.cc/TPw49bB4/hwang.png" />
-                            </div>
-                            <ul class="document">
-                                <li class="MBTI">MBTI | ENTP</li>
-                                <li class="pros">장점 | 튼튼하다</li>
-                                <li class="myStyle">
-                                    협업스타일 | 적극 참여하는 스타일
-                                </li>
-                                <li class="introduce">
-                                    내 소개 | 안녕하세요 ㅇㅇㅇ 입니다
-                                </li>
-                                <li class="blog">
-                                    블로그 주소 | htttp://dddd.com
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="close-btn js-close-modal">Close</a>
-                        <a class="delete-btn js-delete-modal"></a>
-                        <a class="edit-btn js-edit-modal"></a>
-                    </div>
-                </div>
-
-                <div class="container">
-                    <a class="btn js-click-modal">
-                        <div class="card h-100">
-                            <img src="https://i.postimg.cc/pVfpfczy/yang.png" class="card-img-top" />
-                            <div class="card-body">
-                                <label class="card-title">양지원</label>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="modal">
-                        <div class="name">양지원</div>
-                        <div class="body">
-                            <div class="photo">
-                                <img src="https://i.postimg.cc/pVfpfczy/yang.png" />
-                            </div>
-                            <ul class="document">
-                                <li class="MBTI">MBTI | ENTP</li>
-                                <li class="pros">장점 | 튼튼하다</li>
-                                <li class="myStyle">
-                                    협업스타일 | 적극 참여하는 스타일
-                                </li>
-                                <li class="introduce">
-                                    내 소개 | 안녕하세요 ㅇㅇㅇ 입니다
-                                </li>
-                                <li class="blog">
-                                    블로그 주소 | htttp://dddd.com
-                                </li>
-                            </ul>
-                        </div>
-                        <a class="close-btn js-close-modal">Close</a>
-                        <a class="delete-btn js-delete-modal"></a>
-                        <a class="edit-btn js-edit-modal"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <button onclick="listing()">다시 불러오기</button>
+    <ul id="list"></ul>
     <script>
-        $('.js-click-modal').click(function () {
-            var container = $(this).closest('.container');
-            container.addClass('modal-open');
-            container.siblings().fadeOut(300); // 애니메이션 속도 조정
-        });
+      window.onload = (e) => {
+        listing();
+      };
+      const list = document.getElementById('list');
 
-        $('.js-close-modal').click(function () {
-            var container = $(this).closest('.container');
-            container.removeClass('modal-open');
-            setTimeout(function () {
-                container.siblings().fadeIn(300); // 애니메이션 속도 조정
-            }, 100); // 딜레이 시간 조정
-        });
+      async function listing() {
+        try {
+          const res = await fetch('/api/member');
+          const json = await res.json();
+          console.log(json);
+          list.innerHTML = '';
+          json['result'].map((member) => {
+            const card = document.createElement('li');
+            temp_html = `
+                <div>
+                  <a href='/member/${member.id}'><p>${member.name}</p></a>
+                  <p>${member.photo_url}</p>
+                  <p>${member.mbti}</p>
+                  <p>${member.advantage}</p>
+                  <p>${member.co_style}</p>
+                  <p>${member.desc}</p>
+                  <p>${member.blog_url}</p>
+                </div>
+              `;
+            card.innerHTML = temp_html;
+            list.appendChild(card);
+          });
+        } catch (e) {
+          alert(e);
+        }
+      }
     </script>
-</body>
-
+  </body>
 </html>

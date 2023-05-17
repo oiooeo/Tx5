@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>생성 페이지</title>
+  </head>
+  <body>
+    <form method="post" action="/api/member" onsubmit="createMember(event)">
+      <div>
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name" required />
+      </div>
+      <div>
+        <label for="name">Photo: </label>
+        <input type="text" name="photo_url" id="photo_url" />
+      </div>
+      <div>
+        <label for="name">MBTI: </label>
+        <input type="text" name="mbti" id="mbti" />
+      </div>
+      <div>
+        <label for="name">Advantage: </label>
+        <input type="text" name="advantage" id="advantage" />
+      </div>
+      <div>
+        <label for="name">Style: </label>
+        <input type="text" name="co_style" id="co_style" />
+      </div>
+      <div>
+        <label for="name">Description: </label>
+        <input type="text" name="desc" id="desc" />
+      </div>
+      <div>
+        <label for="name">Blog_url: </label>
+        <input type="text" name="blog_url" id="blog_url" />
+      </div>
+      <div>
+        <label for="pass">Password (8 characters minimum):</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          minlength="8"
+          required
+        />
+      </div>
+      <!-- <button onclick="posting()">생성</button> -->
+      <input type="submit" value="생성하기" />
+    </form>
+    <script>
+      async function createMember(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        try {
+          const res = await fetch("/api/member", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          const url = data.url;
+          if (url) {
+            window.location.href = url;
+          } else {
+            throw new Error("No Url");
+          }
+        } catch (e) {
+          alert(e);
+        }
+      }
+    </script>
+  </body>
+</html>
