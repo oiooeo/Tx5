@@ -144,20 +144,41 @@ def handle_member(id):
         return make_response(jsonify({'meg': 'error'}),404)
     elif request.method == 'PUT':
       try:
-        photo_url = request.form['photo_url']
+        image = request.files['image']
+        print(image)
+        if not (is_empty_file(image)):
+          filename =image.filename
+          if not allowed_file(filename):
+            return make_response(jsonify({'meg': 'Invalid file extension'}),404)
+          payload = {
+            'id': id,
+            'extension': filename.rsplit('.', 1)[1],
+            'data': base64.b64encode(image.read()).decode('utf-8')
+          }
+          response = lambda_clinet.invoke(
+            FunctionName='save-image-to-s3',
+            InvocationType='RequestResponse',
+            Payload= json.dumps(payload)
+          )
+          response_payload = response['Payload'].read().decode('utf-8')
+          response_payload = json.loads(response_payload)
+          photo_url = response_payload['body']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
         co_style = request.form['co_style']
         desc = request.form['desc']
         blog_url = request.form['blog_url']
         doc = {
-            'photo_url': photo_url,
             'mbti': mbti,
             'advantage' : advantage,
             'co_style': co_style,
             'desc': desc,
             'blog_url' : blog_url
         }
+
+        if 'photo_url' in locals(): 
+          doc['photo_url'] = photo_url
+        print(doc)
         member_col.update_one({'id':str(id)},{'$set': doc})
         return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
