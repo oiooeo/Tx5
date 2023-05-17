@@ -2,7 +2,7 @@
 
 1. python -m venv venv
 2. source ./venv/Scripts/activate (or) source ./venv/bin/activate
-3. pip install flask pymongo python-dotenv argon2-cffi
+3. pip install flask pymongo python-dotenv argon2-cffi boto3
 
 ## SiteMap
 
