@@ -116,7 +116,7 @@ def get_all_or_create_member():
         db['member'].insert_one(doc)
         return make_response(jsonify({'url': '/member/'+id}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': e}),404)
+        return make_response(jsonify({'meg': str(e)}),404)
 
 ## Get member / Update member / Delete member
 @app.route("/api/member/<string:id>", methods=["GET","PUT","DELETE"])
@@ -182,7 +182,11 @@ class ImageUploadError(Exception):
     def __init__(self):
         super().__init__('이미지 업로드에 실패했습니다.')
 
-def allowed_file(filename):
+class InvalidExtensionError(Exception):    
+  def __init__(self):
+      super().__init__('잘못된 확장자입니다.')
+
+def is_allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_IMAGE_EXTENSIONS
 
@@ -192,8 +196,8 @@ def is_empty_file(file_storage):
 def upload_image(id,image):
     try:
         filename =image.filename
-        if not allowed_file(filename):
-          return make_response(jsonify({'meg': 'Invalid file extension'}),404)
+        if not is_allowed_file(filename):
+          raise InvalidExtensionError
         payload = {
         'id': id,
         'extension': filename.rsplit('.', 1)[1],
