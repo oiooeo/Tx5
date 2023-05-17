@@ -8,7 +8,9 @@ import boto3
 from botocore.config import Config
 import json
 import base64
+import certifi
 
+ca = certifi.where()
 ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 # load environment variable
@@ -19,7 +21,7 @@ app.secret_key = os.getenv('SECRET_KEY')
 # mongodb
 
 MONGODB_URI = os.getenv("MONGODB_URI")
-client = MongoClient(MONGODB_URI)
+client = MongoClient(MONGODB_URI,tlsCAFile=ca)
 print('MongodbClient: ',client)
 db = client['team-intro-app']
 member_col = db.member
