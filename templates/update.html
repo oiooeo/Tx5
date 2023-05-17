@@ -7,9 +7,24 @@
     <title>업데이트 페이지</title>
   </head>
   <body>
+    <form
+      method="post"
+      action="/api/member"
+      enctype="multipart/form-data"
+      onsubmit="updateMember(event)"
+    >
       <div>
         <label for="name">Name: </label>
         <input type="text" name="name" id="name" disabled />
+      </div>
+      <div>
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept=".jpg, .jpeg, .png"
+          multiple
+        />
       </div>
       <div>
         <label for="name">Photo: </label>
@@ -35,7 +50,7 @@
         <label for="name">Blog_url: </label>
         <input type="text" name="blog_url" id="blog_url" />
       </div>
-      <button onclick="update()">확인</button>
+      <input type="submit" value="변경하기" />
     </form>
     <script>
       window.onload = (e) => {
@@ -54,38 +69,25 @@
           document.querySelector("#co_style").value = member.co_style;
           document.querySelector("#desc").value = member.desc;
           document.querySelector("#blog_url").value = member.blog_url;
-        } catch(e) {
+        } catch (e) {
           alert(e);
         }
       }
-      
-      async function update() {
-        const name = document.querySelector("#name").value;
-        const photo_url = document.querySelector("#photo_url").value;
-        const mbti = document.querySelector("#mbti").value;
-        const advantage = document.querySelector("#advantage").value;
-        const co_style = document.querySelector("#co_style").value;
-        const desc = document.querySelector("#desc").value;
-        const blog_url = document.querySelector("#blog_url").value;
 
-
-        let formData = new FormData();
-        formData.append("name", name);
-        formData.append("photo_url", photo_url);
-        formData.append("mbti", mbti);
-        formData.append("advantage", advantage);
-        formData.append("co_style", co_style);
-        formData.append("desc", desc);
-        formData.append("blog_url", blog_url);
-
+      async function updateMember(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
         try {
-          const res = await fetch("/api/member/{{id}}", { method: "PUT", body: formData })
-          if(res.status === 200){
-            window.location.href = '/member/{{id}}'
+          const res = await fetch("/api/member/{{id}}", {
+            method: "PUT",
+            body: formData,
+          });
+          if (res.status === 200) {
+            window.location.href = "/member/{{id}}";
           } else {
             console.log(`error ${res.status}`);
           }
-        } catch(e) {
+        } catch (e) {
           alert(e);
         }
       }
