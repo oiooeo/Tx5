@@ -7,14 +7,27 @@
     <title>생성 페이지</title>
   </head>
   <body>
-    <form method="post" action="/api/member" onsubmit="createMember(event)">
+    <form
+      method="post"
+      action="/api/member"
+      enctype="multipart/form-data"
+      onsubmit="createMember(event)"
+    >
       <div>
         <label for="name">Name: </label>
         <input type="text" name="name" id="name" required />
       </div>
       <div>
-        <label for="name">Photo: </label>
-        <input type="text" name="photo_url" id="photo_url" />
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept=".jpg, .jpeg, .png"
+          multiple
+        />
+      </div>
+      <div class="preview">
+        <p>No files currently selected for upload</p>
       </div>
       <div>
         <label for="name">MBTI: </label>

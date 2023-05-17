@@ -4,6 +4,12 @@ from dotenv import load_dotenv
 from flask import Flask, render_template,session, request, jsonify,make_response,redirect,url_for
 from pymongo import MongoClient
 from argon2 import PasswordHasher
+import boto3
+from botocore.config import Config
+import json
+import base64
+
+ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 # load environment variable
 load_dotenv()
@@ -17,6 +23,16 @@ client = MongoClient(MONGODB_URI)
 print('MongodbClient: ',client)
 db = client['team-intro-app']
 member_col = db.member
+
+aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+# boto3
+
+lambda_clinet = boto3.client('lambda',
+                             region_name = 'ap-northeast-2',
+                             aws_access_key_id = aws_access_key_id,
+                             aws_secret_access_key = aws_secret_access_key
+                             )
 
 # argon2
 ph = PasswordHasher()
@@ -57,7 +73,7 @@ def member_page(id):
       return render_template('member.html',id=id,name=member['name'])
     except Exception as e:
       return redirect(url_for('home_page'))
-
+    
 
 ##### api #####
 
@@ -73,8 +89,28 @@ def get_all_or_create_member():
     elif request.method == 'POST':
       try:
         id = str(uuid.uuid4())
+        if 'image' not in request.files:
+          return make_response(jsonify({'meg': 'error'}),404)
+        
+        image = request.files['image']
+        print(image)
+        filename =image.filename
+        if not allowed_file(filename):
+           return make_response(jsonify({'meg': 'Invalid file extension'}),404)
+        payload = {
+          'id': id,
+          'extension': filename.rsplit('.', 1)[1],
+          'data': base64.b64encode(image.read()).decode('utf-8')
+        }
+        response = lambda_clinet.invoke(
+          FunctionName='save-image-to-s3',
+          InvocationType='RequestResponse',
+          Payload= json.dumps(payload)
+        )
+        response_payload = response['Payload'].read().decode('utf-8')
+        response_payload = json.loads(response_payload)
+        photo_url = response_payload['body']
         name = request.form['name']
-        photo_url = request.form['photo_url']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
         co_style = request.form['co_style']
@@ -96,7 +132,7 @@ def get_all_or_create_member():
         db['member'].insert_one(doc)
         return make_response(jsonify({'url': '/member/'+id}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': 'error'}),404)
+        return make_response(jsonify({'meg': e}),404)
 
 ## Get member / Update member / Delete member
 @app.route("/api/member/<string:id>", methods=["GET","PUT","DELETE"])
@@ -151,6 +187,11 @@ def validate_member(id):
     except Exception as e:
       return make_response(jsonify({'meg': 'error'}),404)
        
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1] in ALLOWED_IMAGE_EXTENSIONS
+
 
 ##### main #####
 if __name__ == '__main__':
