@@ -25,7 +25,7 @@
         event.preventDefault();
         const formData = new FormData(event.target);
         try {
-          const res = await fetch("/api/validation/{{name}}", {
+          const res = await fetch("/api/validation/{{id}}", {
             method: "POST",
             body: formData,
           });

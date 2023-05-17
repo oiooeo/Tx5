@@ -1,4 +1,5 @@
 import os
+import uuid
 from dotenv import load_dotenv
 from flask import Flask, render_template,session, request, jsonify,make_response,redirect,url_for
 from pymongo import MongoClient
@@ -33,27 +34,27 @@ def create_page():
     return render_template('create.html')
 
 ## Update Page
-@app.route('/manage/update/<string:name>')
-def update_page(name):
+@app.route('/manage/update/<string:id>')
+def update_page(id):
     try:
-      member = member_col.find_one({'name':str(name)}, {'_id': False})
+      member = member_col.find_one({'id':str(id)}, {'_id': False})
       if(member is None):
         return redirect(url_for('home_page'))
-      elif (name == session.get('userName')):
-        return render_template('update.html',name=name)
+      elif (id == session.get('id')):
+        return render_template('update.html',id=id)
       else:
-        return render_template('validation.html',name=name)
+        return render_template('validation.html',id=id)
     except Exception as e:
       return redirect(url_for('home_page'))
     
 ## Member Page
-@app.route('/member/<string:name>')
-def member_page(name):
+@app.route('/member/<string:id>')
+def member_page(id):
     try:
-      member = member_col.find_one({'name':str(name)}, {'_id': False})
+      member = member_col.find_one({'id':str(id)}, {'_id': False})
       if(member is None):
         return redirect(url_for('/'))
-      return render_template('member.html',name=name)
+      return render_template('member.html',id=id,name=member['name'])
     except Exception as e:
       return redirect(url_for('home_page'))
 
@@ -71,6 +72,7 @@ def get_all_or_create_member():
         return make_response(jsonify({'meg': 'error'}),404)
     elif request.method == 'POST':
       try:
+        id = str(uuid.uuid4())
         name = request.form['name']
         photo_url = request.form['photo_url']
         mbti = request.form['mbti'].upper()
@@ -81,6 +83,7 @@ def get_all_or_create_member():
         password = request.form['password']
         password_hash = ph.hash(str(password))
         doc = {
+            'id' : id,
             'name': name,
             'photo_url': photo_url,
             'mbti': mbti,
@@ -91,16 +94,16 @@ def get_all_or_create_member():
             'password' : password_hash
         }
         db['member'].insert_one(doc)
-        return make_response(jsonify({'url': '/member/'+name}),200)
+        return make_response(jsonify({'url': '/member/'+id}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
 
 ## Get member / Update member / Delete member
-@app.route("/api/member/<string:name>", methods=["GET","PUT","DELETE"])
-def handle_member(name):
+@app.route("/api/member/<string:id>", methods=["GET","PUT","DELETE"])
+def handle_member(id):
     if request.method == 'GET':
       try:
-        member = member_col.find_one({'name':str(name)}, {'_id': False})
+        member = member_col.find_one({'id':str(id)}, {'_id': False})
         return make_response(jsonify({'result': member}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
@@ -120,29 +123,30 @@ def handle_member(name):
             'desc': desc,
             'blog_url' : blog_url
         }
-        member_col.update_one({'name':str(name)},{'$set': doc})
+        member_col.update_one({'id':str(id)},{'$set': doc})
         return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
     elif request.method == 'DELETE':
       try:
         password = request.form['password']
-        member = member_col.find_one({'name':str(name)})
+        member = member_col.find_one({'id':str(id)},{'_id':False})
+        print(member)
         ph.verify(member['password'], str(password))
-        member_col.delete_one({'_id':member['_id']})
+        member_col.delete_one({'id':member['id']})
         session.clear()
         return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
         return make_response(jsonify({'meg': 'error'}),404)
       
-@app.route("/api/validation/<string:name>", methods=["POST"])
-def validate_member(name):
+@app.route("/api/validation/<string:id>", methods=["POST"])
+def validate_member(id):
     try:
       password = request.form['password']
 
-      member = member_col.find_one({'name':str(name)}, {'_id': False})
+      member = member_col.find_one({'id':str(id)}, {'_id': False})
       ph.verify(member['password'], str(password))
-      session['userName'] = name;
+      session['id'] = id;
       return make_response(jsonify({'meg': 'success'}),200)
     except Exception as e:
       return make_response(jsonify({'meg': 'error'}),404)

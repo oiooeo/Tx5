@@ -8,7 +8,7 @@
   </head>
   <body>
     {{name}}
-    <a href="/manage/update/{{name}}">멤버 수정하기</a>
+    <a href="/manage/update/{{id}}">멤버 수정하기</a>
     <form method="post" action="/api/member" onsubmit="deleteMember(event)">
       <div>
         <label for="pass">Password:</label>
@@ -30,7 +30,7 @@
       const list = document.getElementById("list");
       async function listing() {
         try {
-          const res = await fetch(`/api/member/{{name}}`);
+          const res = await fetch(`/api/member/{{id}}`);
           const json = await res.json();
           list.innerHTML = "";
           const member = json["result"];
@@ -57,7 +57,7 @@
         event.preventDefault();
         const formData = new FormData(event.target);
         try {
-          const res = await fetch("/api/member/{{name}}", {
+          const res = await fetch("/api/member/{{id}}", {
             method: "DELETE",
             body: formData,
           });

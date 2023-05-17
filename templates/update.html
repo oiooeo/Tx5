@@ -44,7 +44,7 @@
       const list = document.getElementById("list");
       async function listing() {
         try {
-          const res = await fetch(`/api/member/{{name}}`);
+          const res = await fetch(`/api/member/{{id}}`);
           const json = await res.json();
           const member = json["result"];
           document.querySelector("#name").value = member.name;
@@ -79,9 +79,9 @@
         formData.append("blog_url", blog_url);
 
         try {
-          const res = await fetch("/api/member/{{name}}", { method: "PUT", body: formData })
+          const res = await fetch("/api/member/{{id}}", { method: "PUT", body: formData })
           if(res.status === 200){
-            window.location.href = '/member/{{name}}'
+            window.location.href = '/member/{{id}}'
           } else {
             console.log(`error ${res.status}`);
           }
