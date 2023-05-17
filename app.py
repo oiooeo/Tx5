@@ -126,7 +126,7 @@ def handle_member(id):
         member = member_col.find_one({'id':str(id)}, {'_id': False})
         return make_response(jsonify({'result': member}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': 'error'}),404)
+        return make_response(jsonify({'meg': str(e)}),404)
     elif request.method == 'PUT':
       try:
         image = request.files['image']
@@ -151,7 +151,7 @@ def handle_member(id):
         member_col.update_one({'id':str(id)},{'$set': doc})
         return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': 'error'}),404)
+        return make_response(jsonify({'meg': str(e)}),404)
     elif request.method == 'DELETE':
       try:
         password = request.form['password']
@@ -162,7 +162,7 @@ def handle_member(id):
         session.clear()
         return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': 'error'}),404)
+        return make_response(jsonify({'meg': str(e)}),404)
       
 @app.route("/api/validation/<string:id>", methods=["POST"])
 def validate_member(id):
@@ -174,7 +174,7 @@ def validate_member(id):
       session['id'] = id;
       return make_response(jsonify({'meg': 'success'}),200)
     except Exception as e:
-      return make_response(jsonify({'meg': 'error'}),404)
+      return make_response(jsonify({'meg': str(e)}),404)
        
 
 
