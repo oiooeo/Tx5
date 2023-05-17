@@ -93,22 +93,7 @@ def get_all_or_create_member():
         if (is_empty_file(image)):
           photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
         else:
-          filename =image.filename
-          if not allowed_file(filename):
-            return make_response(jsonify({'meg': 'Invalid file extension'}),404)
-          payload = {
-            'id': id,
-            'extension': filename.rsplit('.', 1)[1],
-            'data': base64.b64encode(image.read()).decode('utf-8')
-          }
-          response = lambda_clinet.invoke(
-            FunctionName='save-image-to-s3',
-            InvocationType='RequestResponse',
-            Payload= json.dumps(payload)
-          )
-          response_payload = response['Payload'].read().decode('utf-8')
-          response_payload = json.loads(response_payload)
-          photo_url = response_payload['body']
+          photo_url = upload_image(id,image)
         name = request.form['name']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
@@ -145,24 +130,8 @@ def handle_member(id):
     elif request.method == 'PUT':
       try:
         image = request.files['image']
-        print(image)
         if not (is_empty_file(image)):
-          filename =image.filename
-          if not allowed_file(filename):
-            return make_response(jsonify({'meg': 'Invalid file extension'}),404)
-          payload = {
-            'id': id,
-            'extension': filename.rsplit('.', 1)[1],
-            'data': base64.b64encode(image.read()).decode('utf-8')
-          }
-          response = lambda_clinet.invoke(
-            FunctionName='save-image-to-s3',
-            InvocationType='RequestResponse',
-            Payload= json.dumps(payload)
-          )
-          response_payload = response['Payload'].read().decode('utf-8')
-          response_payload = json.loads(response_payload)
-          photo_url = response_payload['body']
+          photo_url = upload_image(id,image)
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
         co_style = request.form['co_style']
@@ -215,6 +184,27 @@ def allowed_file(filename):
 def is_empty_file(file_storage):
     return file_storage.filename == '' and file_storage.content_type == 'application/octet-stream'
 
+def upload_image(id,image):
+    try:
+        filename =image.filename
+        if not allowed_file(filename):
+          return make_response(jsonify({'meg': 'Invalid file extension'}),404)
+        payload = {
+        'id': id,
+        'extension': filename.rsplit('.', 1)[1],
+        'data': base64.b64encode(image.read()).decode('utf-8')
+        }
+        response = lambda_clinet.invoke(
+        FunctionName='save-image-to-s3',
+        InvocationType='RequestResponse',
+        Payload= json.dumps(payload)
+        )
+        response_payload = response['Payload'].read().decode('utf-8')
+        response_payload = json.loads(response_payload)
+        return response_payload['body']
+    except Exception as e:
+       return {'error: ': str(e)}
+  
 ##### main #####
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5050, debug=True)
