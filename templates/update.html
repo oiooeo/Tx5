@@ -90,9 +90,11 @@
       justify-content: center;
       align-items: center;
     }
+
     #loader.on {
       display: flex;
     }
+
     #loader-svg path,
     #loader-svg rect {
       fill: #78ad80;
@@ -161,6 +163,7 @@
     </div>
     <input class="button" type="submit" value="변경하기" />
   </form>
+
   <div id="loader">
     <svg
       version="1.1"
@@ -204,6 +207,7 @@
     function selectImage() {
       inputImage.click();
     }
+
     function changeImage(e) {
       console.log("change");
       const files = e.target.files;
@@ -215,17 +219,20 @@
       }
       imagePreview.src = URL.createObjectURL(file);
     }
+
     function resetImage() {
       console.log("reset");
       imagePreview.src =
         "https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png";
       inputImage.value = "";
     }
+
     inputImage.onchange = changeImage;
 
     window.onload = (e) => {
       listing();
     };
+
     const list = document.getElementById("list");
     async function listing() {
       onLoader();

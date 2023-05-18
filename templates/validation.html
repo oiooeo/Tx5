@@ -111,6 +111,7 @@
     </div>
     <input class="button" type="submit" value="확인" />
   </form>
+
   <div id="loader">
     <svg
       version="1.1"
@@ -139,6 +140,7 @@
       </path>
     </svg>
   </div>
+
   <script>
     const loader = document.querySelector("#loader");
 
@@ -149,6 +151,7 @@
     function offLoader() {
       loader.classList.remove("on");
     }
+
     async function validateMember(event) {
       event.preventDefault();
       const formData = new FormData(event.target);
