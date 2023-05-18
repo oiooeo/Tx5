@@ -1,96 +1,211 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>업데이트 페이지</title>
-  </head>
-  <body>
-    <form
-      method="post"
-      action="/api/member"
-      enctype="multipart/form-data"
-      onsubmit="updateMember(event)"
-    >
-      <div>
-        <label for="name">Name: </label>
-        <input type="text" name="name" id="name" disabled />
-      </div>
-      <div>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept=".jpg, .jpeg, .png"
-          multiple
-        />
-      </div>
-      <div>
-        <label for="name">Photo: </label>
-        <input type="text" name="photo_url" id="photo_url" />
-      </div>
-      <div>
-        <label for="name">MBTI: </label>
-        <input type="text" name="mbti" id="mbti" />
-      </div>
-      <div>
-        <label for="name">Advantage: </label>
-        <input type="text" name="advantage" id="advantage" />
-      </div>
-      <div>
-        <label for="name">Style: </label>
-        <input type="text" name="co_style" id="co_style" />
-      </div>
-      <div>
-        <label for="name">Description: </label>
-        <input type="text" name="desc" id="desc" />
-      </div>
-      <div>
-        <label for="name">Blog_url: </label>
-        <input type="text" name="blog_url" id="blog_url" />
-      </div>
-      <input type="submit" value="변경하기" />
-    </form>
-    <script>
-      window.onload = (e) => {
-        listing();
-      };
-      const list = document.getElementById("list");
-      async function listing() {
-        try {
-          const res = await fetch(`/api/member/{{id}}`);
-          const json = await res.json();
-          const member = json["result"];
-          document.querySelector("#name").value = member.name;
-          document.querySelector("#photo_url").value = member.photo_url;
-          document.querySelector("#mbti").value = member.mbti;
-          document.querySelector("#advantage").value = member.advantage;
-          document.querySelector("#co_style").value = member.co_style;
-          document.querySelector("#desc").value = member.desc;
-          document.querySelector("#blog_url").value = member.blog_url;
-        } catch (e) {
-          alert(e);
-        }
-      }
 
-      async function updateMember(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        try {
-          const res = await fetch("/api/member/{{id}}", {
-            method: "PUT",
-            body: formData,
-          });
-          if (res.status === 200) {
-            window.location.href = "/member/{{id}}";
-          } else {
-            console.log(`error ${res.status}`);
-          }
-        } catch (e) {
-          alert(e);
-        }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <title>Tx5</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
+
+    * {
+      font-family: 'IBM Plex Sans KR', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .mytitle {
+      width: 100%;
+      height: 160px;
+
+      background-color: #78ad80;
+      color: #ffffff;
+      font-size: xx-large;
+      font-weight: 500;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      margin-bottom: 50px;
+    }
+
+    #back_btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-image: url(https://i.postimg.cc/SsFvYypM/left-arrow-circle-regular-24.png);
+      width: 35px;
+      height: 35px;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+    .form-control {
+      width: 500px;
+    }
+
+    .btn-outline-secondary {
+      margin-top: 20px;
+
+    }
+
+    .button {
+      background: #78ad80;
+      border: #ffffff00;
+      padding: 5px 15px;
+      margin-top: 10px;
+      border-radius: 20px;
+      color: #ffffff;
+      position: relative;
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="mytitle">
+    <a id="back_btn" class="back_button" role="button" href="/"></a>
+    <h1>𝐓 𝐱 𝟓</h1>
+  </div>
+
+  <form class="wrap" method="post" action="/api/member" enctype="multipart/form-data" onsubmit="updateMember(event)">
+
+    <h4>수정하기</h4>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">이름 (수정 불가)</label>
+      <input type="text" class="form-control" name="name" id="name" disabled>
+    </div>
+
+    <div class="mb-3" style="width: 500px;">
+      <label for="exampleFormControlInput1" class="form-label">이미지</label> </br>
+      <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png" style="
+            position: absolute;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            border: 0;
+          " />
+      <div style="margin-bottom: 7px;">
+        <label class="button" type="button" onclick="selectImage()">사진 선택</label>
+        <label class="button" type="button" onclick="resetImage()">사진 삭제</label>
+      </div>
+      <img id="imagePreview" style="width: 100px; height: 100px; object-fit: cover"
+        src="https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png" />
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">MBTI</label>
+      <input type="text" class="form-control" name="mbti" id="mbti">
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label" id="blogInpnut">블로그 링크</label>
+      <input type="text" class="form-control" name="blog_url" id="blog_url" placeholder="url">
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">본인 소개</label>
+      <textarea class="form-control" name="desc" id="desc" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">장점</label>
+      <textarea class="form-control" name="advantage" id="advantage" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label">협업 스타일</label>
+      <textarea class="form-control" name="co_style" id="co_style" rows="3"></textarea>
+    </div>
+    <input class="button" type="submit" value="변경하기" />
+  </form>
+  <script>
+    const inputImage = document.querySelector("#image");
+    const imagePreview = document.querySelector("#imagePreview");
+
+    function selectImage() {
+      inputImage.click();
+    }
+    function changeImage(e) {
+      console.log("change");
+      const files = e.target.files;
+      if (files.length < 1) return resetImage();
+      const file = files[0];
+      if (file.size > 2097152) {
+        alert("2MB이하의 이미지를 선택해주세요.");
+        return resetImage();
       }
-    </script>
-  </body>
+      imagePreview.src = URL.createObjectURL(file);
+    }
+    function resetImage() {
+      console.log("reset");
+      imagePreview.src =
+        "https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png";
+      inputImage.value = "";
+    }
+    inputImage.onchange = changeImage;
+
+    window.onload = (e) => {
+      listing();
+    };
+    const list = document.getElementById("list");
+    async function listing() {
+      try {
+        const res = await fetch(`/api/member/{{id}}`);
+        const json = await res.json();
+        const member = json["result"];
+        document.querySelector("#name").value = member.name;
+        document.querySelector("#imagePreview").src = member.photo_url;
+        document.querySelector("#mbti").value = member.mbti;
+        document.querySelector("#advantage").value = member.advantage;
+        document.querySelector("#co_style").value = member.co_style;
+        document.querySelector("#desc").value = member.desc;
+        document.querySelector("#blog_url").value = member.blog_url;
+      } catch (e) {
+        alert(e);
+      }
+    }
+
+    async function updateMember(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      try {
+        const res = await fetch("/api/member/{{id}}", {
+          method: "PUT",
+          body: formData,
+        });
+        if (res.status === 200) {
+          window.location.replace("/");
+        } else {
+          console.log(`error ${res.status}`);
+        }
+      } catch (e) {
+        alert(e);
+      }
+    }
+  </script>
+</body>
+
 </html>

@@ -8,7 +8,9 @@ import boto3
 from botocore.config import Config
 import json
 import base64
+import certifi
 
+ca = certifi.where()
 ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 # load environment variable
@@ -16,10 +18,11 @@ load_dotenv()
 # flask
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
+app.config['PERMANENT_SESSION_LIFETIME'] = 600
 # mongodb
 
 MONGODB_URI = os.getenv("MONGODB_URI")
-client = MongoClient(MONGODB_URI)
+client = MongoClient(MONGODB_URI,tlsCAFile=ca)
 print('MongodbClient: ',client)
 db = client['team-intro-app']
 member_col = db.member
@@ -28,7 +31,7 @@ aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 # boto3
 
-lambda_clinet = boto3.client('lambda',
+lambda_client = boto3.client('lambda',
                              region_name = 'ap-northeast-2',
                              aws_access_key_id = aws_access_key_id,
                              aws_secret_access_key = aws_secret_access_key
@@ -94,14 +97,17 @@ def get_all_or_create_member():
           photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
         else:
           photo_url = upload_image(id,image)
+        password = request.form['password']
+        if (len(password)<4):
+          raise InvalidPasswordError
+        password_hash = ph.hash(str(password))
         name = request.form['name']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
         co_style = request.form['co_style']
         desc = request.form['desc']
         blog_url = request.form['blog_url']
-        password = request.form['password']
-        password_hash = ph.hash(str(password))
+       
         doc = {
             'id' : id,
             'name': name,
@@ -114,7 +120,7 @@ def get_all_or_create_member():
             'password' : password_hash
         }
         db['member'].insert_one(doc)
-        return make_response(jsonify({'url': '/member/'+id}),200)
+        return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
         return make_response(jsonify({'meg': str(e)}),404)
 
@@ -156,8 +162,8 @@ def handle_member(id):
       try:
         password = request.form['password']
         member = member_col.find_one({'id':str(id)},{'_id':False})
-        print(member)
         ph.verify(member['password'], str(password))
+        delete_image(str(id))
         member_col.delete_one({'id':member['id']})
         session.clear()
         return make_response(jsonify({'meg': 'success'}),200)
@@ -176,11 +182,17 @@ def validate_member(id):
     except Exception as e:
       return make_response(jsonify({'meg': str(e)}),404)
        
-
+class InvalidPasswordError(Exception):    
+    def __init__(self):
+        super().__init__('잘못된 비밀번호입니다.')
 
 class ImageUploadError(Exception):    
     def __init__(self):
         super().__init__('이미지 업로드에 실패했습니다.')
+
+class ImageDeleteError(Exception):    
+    def __init__(self):
+        super().__init__('이미지 삭제에 실패했습니다.')
 
 class InvalidExtensionError(Exception):    
   def __init__(self):
@@ -199,20 +211,36 @@ def upload_image(id,image):
         if not is_allowed_file(filename):
           raise InvalidExtensionError
         payload = {
-        'id': id,
-        'extension': filename.rsplit('.', 1)[1],
-        'data': base64.b64encode(image.read()).decode('utf-8')
+          'id': id,
+          'extension': filename.rsplit('.', 1)[1],
+          'data': base64.b64encode(image.read()).decode('utf-8')
         }
-        response = lambda_clinet.invoke(
-        FunctionName='save-image-to-s3',
-        InvocationType='RequestResponse',
-        Payload= json.dumps(payload)
+        response = lambda_client.invoke(
+          FunctionName='save-image-to-s3',
+          InvocationType='RequestResponse',
+          Payload= json.dumps(payload)
         )
         response_payload = response['Payload'].read().decode('utf-8')
         response_payload = json.loads(response_payload)
         return response_payload['body']
     except Exception as e:
         raise ImageUploadError
+
+def delete_image(id):
+  try:
+      payload = {
+         'id': id
+      }
+      response = lambda_client.invoke(
+         FunctionName='delete-image-in-s3',
+         InvocationType='RequestResponse',
+         Payload= json.dumps(payload)
+      )
+      response_payload = response['Payload'].read().decode('utf-8')
+      response_payload = json.loads(response_payload)
+      return response_payload['body']
+  except Exception as e:
+      raise ImageDeleteError 
   
 ##### main #####
 if __name__ == '__main__':

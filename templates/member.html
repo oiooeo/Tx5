@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{name}}의 페이지</title>
   </head>
+
   <body>
     {{name}}
     <a href="/manage/update/{{id}}">멤버 수정하기</a>
@@ -16,7 +17,7 @@
           type="password"
           id="password"
           name="password"
-          minlength="8"
+          minlength="4"
           required
         />
       </div>
@@ -27,14 +28,14 @@
       window.onload = (e) => {
         listing();
       };
-      const list = document.getElementById("list");
+      const list = document.getElementById('list');
       async function listing() {
         try {
           const res = await fetch(`/api/member/{{id}}`);
           const json = await res.json();
-          list.innerHTML = "";
-          const member = json["result"];
-          const card = document.createElement("li");
+          list.innerHTML = '';
+          const member = json['result'];
+          const card = document.createElement('li');
           temp_html = `
               <div>
                 <p>${member.name}</p>
@@ -57,11 +58,11 @@
         event.preventDefault();
         const formData = new FormData(event.target);
         try {
-          const res = await fetch("/api/member/{{id}}", {
-            method: "DELETE",
+          const res = await fetch('/api/member/{{id}}', {
+            method: 'DELETE',
             body: formData,
           });
-          if (res.status == 200) window.location.href = "/";
+          if (res.status == 200) window.location.href = '/';
         } catch (e) {
           alert(e);
         }
