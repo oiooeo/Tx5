@@ -18,7 +18,7 @@ load_dotenv()
 # flask
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
-app.config['PERMANENT_SESSION_LIFETIME'] = 10
+app.config['PERMANENT_SESSION_LIFETIME'] = 600
 # mongodb
 
 MONGODB_URI = os.getenv("MONGODB_URI")
