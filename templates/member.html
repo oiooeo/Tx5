@@ -85,7 +85,7 @@
   <div class="mytitle">
     <h1>𝐓 𝐱 𝟓</h1>
   </div>
-  
+
   <form class="wrap" method="post" action="/api/member" onsubmit="deleteMember(event)">
     <div class="mb-3">
       <label for="pass">삭제하시려면 비밀번호를 입력하세요</label>
@@ -93,7 +93,7 @@
     </div>
     <input class="button" type="submit" value="삭제" />
   </form>
-  
+
   <script>
     async function deleteMember(event) {
       event.preventDefault();
@@ -103,7 +103,9 @@
           method: "DELETE",
           body: formData,
         });
+        const json = await res.json();
         if (res.status == 200) window.location.href = "/";
+        else alert(json.error);
       } catch (e) {
         alert(e);
       }

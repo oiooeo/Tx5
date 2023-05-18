@@ -193,6 +193,7 @@
                 if (res.status === 200) {
                     window.location.replace("/");
                 } else {
+                    console.log(data.error);
                     throw new Error("팀원 생성에 실패했습니다.");
                 }
             } catch (e) {

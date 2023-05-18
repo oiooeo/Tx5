@@ -64,6 +64,7 @@ def update_page(id):
       else:
         return render_template('validation.html',id=id)
     except Exception as e:
+      print('update_page Error: ',str(e))
       return redirect(url_for('home_page'))
     
 ## Member Page
@@ -75,6 +76,7 @@ def member_page(id):
         return redirect(url_for('/'))
       return render_template('member.html',id=id,name=member['name'])
     except Exception as e:
+      print('member_page Error: ',str(e))
       return redirect(url_for('home_page'))
     
 
@@ -86,28 +88,29 @@ def get_all_or_create_member():
     if request.method == 'GET':
       try:
         allMember = list(member_col.find({}, {'_id': False}))
-        return make_response(jsonify({'result': allMember}),200)
+        return make_response(jsonify({'result': allMember,'meg': '데이터를 성공적으로 불러왔습니다.'}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': str(e)}),404)
+        print('/api/member [GET] Error: ',str(e))
+        return make_response(jsonify({'error': '데이터를 찾을 수 없습니다.'}),404)
     elif request.method == 'POST':
+      
+      id = str(uuid.uuid4())
+      image = request.files['image']
+      if (is_empty_file(image)):
+        photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
+      else:
+        photo_url = upload_image(id,image)
+      password = request.form['password']
+      if (len(password)<4):
+        return make_response(jsonify({'error': '잘못된 비밀번호입니다.'}),400)
+      password_hash = ph.hash(str(password))
+      name = request.form['name']
+      mbti = request.form['mbti'].upper()
+      advantage = request.form['advantage']
+      co_style = request.form['co_style']
+      desc = request.form['desc']
+      blog_url = request.form['blog_url']
       try:
-        id = str(uuid.uuid4())
-        image = request.files['image']
-        if (is_empty_file(image)):
-          photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
-        else:
-          photo_url = upload_image(id,image)
-        password = request.form['password']
-        if (len(password)<4):
-          raise InvalidPasswordError
-        password_hash = ph.hash(str(password))
-        name = request.form['name']
-        mbti = request.form['mbti'].upper()
-        advantage = request.form['advantage']
-        co_style = request.form['co_style']
-        desc = request.form['desc']
-        blog_url = request.form['blog_url']
-       
         doc = {
             'id' : id,
             'name': name,
@@ -120,9 +123,10 @@ def get_all_or_create_member():
             'password' : password_hash
         }
         db['member'].insert_one(doc)
-        return make_response(jsonify({'meg': 'success'}),200)
+        return make_response(jsonify({'meg': '회원가입이 완료되었습니다.'}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': str(e)}),404)
+        print('/api/member [POST] Error: ',str(e))
+        return make_response(jsonify({'error': '회원가입에 실패했습니다.'}),404)
 
 ## Get member / Update member / Delete member
 @app.route("/api/member/<string:id>", methods=["GET","PUT","DELETE"])
@@ -132,17 +136,18 @@ def handle_member(id):
         member = member_col.find_one({'id':str(id)}, {'_id': False})
         return make_response(jsonify({'result': member}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': str(e)}),404)
+        print('/api/member/<id> [GET] Error: ',str(e))
+        return make_response(jsonify({'error': '해당 멤버의 정보를 찾을 수 없습니다.'}),404)
     elif request.method == 'PUT':
+      image = request.files['image']
+      if not (is_empty_file(image)):
+        photo_url = upload_image(id,image)
+      mbti = request.form['mbti'].upper()
+      advantage = request.form['advantage']
+      co_style = request.form['co_style']
+      desc = request.form['desc']
+      blog_url = request.form['blog_url']
       try:
-        image = request.files['image']
-        if not (is_empty_file(image)):
-          photo_url = upload_image(id,image)
-        mbti = request.form['mbti'].upper()
-        advantage = request.form['advantage']
-        co_style = request.form['co_style']
-        desc = request.form['desc']
-        blog_url = request.form['blog_url']
         doc = {
             'mbti': mbti,
             'advantage' : advantage,
@@ -150,41 +155,43 @@ def handle_member(id):
             'desc': desc,
             'blog_url' : blog_url
         }
-
         if 'photo_url' in locals(): 
           doc['photo_url'] = photo_url
-        print(doc)
         member_col.update_one({'id':str(id)},{'$set': doc})
-        return make_response(jsonify({'meg': 'success'}),200)
+        return make_response(jsonify({'meg': '변경사항을 성공적으로 저장하였습니다.'}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': str(e)}),404)
+        print('/api/member/<id> [PUT] Error: ',str(e))
+        return make_response(jsonify({'error': '서버 오류로 인해 변경사항 저장을 실패하였습니다.'}),500)
     elif request.method == 'DELETE':
       try:
         password = request.form['password']
         member = member_col.find_one({'id':str(id)},{'_id':False})
         ph.verify(member['password'], str(password))
+      except Exception as e:
+        print('/api/member/<id> [DELETE] Error: ',str(e))
+        return make_response(jsonify({'error': '비밀번호가 일치하지 않습니다.'}),403)
+      try:  
         delete_image(str(id))
         member_col.delete_one({'id':member['id']})
         session.clear()
-        return make_response(jsonify({'meg': 'success'}),200)
+        return make_response(jsonify({'meg': '멤버를 성공적으로 삭제하였습니다.'}),200)
       except Exception as e:
-        return make_response(jsonify({'meg': str(e)}),404)
+        print('/api/member/<id> [DELETE] Error: ',str(e))
+        return make_response(jsonify({'error': '서버 오류로 인해 멤버 삭제에 실패했습니다.'}),500)
       
 @app.route("/api/validation/<string:id>", methods=["POST"])
 def validate_member(id):
     try:
       password = request.form['password']
-
       member = member_col.find_one({'id':str(id)}, {'_id': False})
       ph.verify(member['password'], str(password))
-      session['id'] = id;
-      return make_response(jsonify({'meg': 'success'}),200)
     except Exception as e:
-      return make_response(jsonify({'meg': str(e)}),404)
+      print('/api/validation/<id> [POST] Error: ',str(e))
+      return make_response(jsonify({'error': '비밀번호가 일치하지 않습니다.'}),403)
+    session['id'] = id;
+    return make_response(jsonify({'meg': '인증에 성공하였습니다.'}),200)
        
-class InvalidPasswordError(Exception):    
-    def __init__(self):
-        super().__init__('잘못된 비밀번호입니다.')
+
 
 class ImageUploadError(Exception):    
     def __init__(self):
@@ -224,6 +231,7 @@ def upload_image(id,image):
         response_payload = json.loads(response_payload)
         return response_payload['body']
     except Exception as e:
+        print('upload_image error: ',str(e))
         raise ImageUploadError
 
 def delete_image(id):
@@ -240,6 +248,7 @@ def delete_image(id):
       response_payload = json.loads(response_payload)
       return response_payload['body']
   except Exception as e:
+      print('delete_image error: ',str(e))
       raise ImageDeleteError 
   
 ##### main #####
