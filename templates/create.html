@@ -114,7 +114,7 @@
           if (res.status === 200) {
             window.location.replace("/");
           } else {
-            console.log(data.meg);
+            console.log(data.error);
             throw new Error("멤버 생성에 실패했습니다.");
           }
         } catch (e) {

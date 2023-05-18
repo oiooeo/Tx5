@@ -98,14 +98,18 @@
         try {
           const res = await fetch(`/api/member/{{id}}`);
           const json = await res.json();
-          const member = json["result"];
-          document.querySelector("#name").value = member.name;
-          document.querySelector("#imagePreview").src = member.photo_url;
-          document.querySelector("#mbti").value = member.mbti;
-          document.querySelector("#advantage").value = member.advantage;
-          document.querySelector("#co_style").value = member.co_style;
-          document.querySelector("#desc").value = member.desc;
-          document.querySelector("#blog_url").value = member.blog_url;
+          if (res.status === 200) {
+            const member = json["result"];
+            document.querySelector("#name").value = member.name;
+            document.querySelector("#imagePreview").src = member.photo_url;
+            document.querySelector("#mbti").value = member.mbti;
+            document.querySelector("#advantage").value = member.advantage;
+            document.querySelector("#co_style").value = member.co_style;
+            document.querySelector("#desc").value = member.desc;
+            document.querySelector("#blog_url").value = member.blog_url;
+          } else {
+            alert(json.error);
+          }
         } catch (e) {
           alert(e);
         }
@@ -119,10 +123,11 @@
             method: "PUT",
             body: formData,
           });
+          const json = await res.json();
           if (res.status === 200) {
             window.location.href = "/member/{{id}}";
           } else {
-            console.log(`error ${res.status}`);
+            alert(json.error);
           }
         } catch (e) {
           alert(e);

@@ -33,21 +33,25 @@
           const res = await fetch(`/api/member/{{id}}`);
           const json = await res.json();
           list.innerHTML = "";
-          const member = json["result"];
-          const card = document.createElement("li");
-          temp_html = `
-              <div>
-                <p>${member.name}</p>
-                <img src='${member.photo_url}'' alt='${member.name}'/>
-                <p>${member.mbti}</p>
-                <p>${member.advantage}</p>
-                <p>${member.co_style}</p>
-                <p>${member.desc}</p>
-                <p>${member.blog_url}</p>
-              </div>
-            `;
-          card.innerHTML = temp_html;
-          list.appendChild(card);
+          if (res.status === 200) {
+            const member = json["result"];
+            const card = document.createElement("li");
+            temp_html = `
+                <div>
+                  <p>${member.name}</p>
+                  <img src='${member.photo_url}'' alt='${member.name}'/>
+                  <p>${member.mbti}</p>
+                  <p>${member.advantage}</p>
+                  <p>${member.co_style}</p>
+                  <p>${member.desc}</p>
+                  <p>${member.blog_url}</p>
+                </div>
+              `;
+            card.innerHTML = temp_html;
+            list.appendChild(card);
+          } else {
+            alert(json.error);
+          }
         } catch (e) {
           alert(e);
         }
@@ -61,7 +65,9 @@
             method: "DELETE",
             body: formData,
           });
+          const json = await res.json();
           if (res.status == 200) window.location.href = "/";
+          else alert(json.error);
         } catch (e) {
           alert(e);
         }

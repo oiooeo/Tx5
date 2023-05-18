@@ -29,8 +29,9 @@
             method: "POST",
             body: formData,
           });
-          const data = await res.json();
+          const json = await res.json();
           if (res.status == 200) window.location.reload();
+          else alert(json.error);
         } catch (e) {
           alert(e);
         }

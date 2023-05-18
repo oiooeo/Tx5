@@ -20,11 +20,11 @@
         try {
           const res = await fetch("/api/member");
           const json = await res.json();
-          console.log(json);
           list.innerHTML = "";
-          json["result"].map((member) => {
-            const card = document.createElement("li");
-            temp_html = `
+          if (res.status === 200) {
+            json["result"].map((member) => {
+              const card = document.createElement("li");
+              temp_html = `
               <div>
                 <a href='/member/${member.id}'><p>${member.name}</p></a>
                 <img src='${member.photo_url}'' alt='${member.name}'/>
@@ -35,9 +35,12 @@
                 <p>${member.blog_url}</p>
               </div>
             `;
-            card.innerHTML = temp_html;
-            list.appendChild(card);
-          });
+              card.innerHTML = temp_html;
+              list.appendChild(card);
+            });
+          } else {
+            alert(json.error);
+          }
         } catch (e) {
           alert(e);
         }
