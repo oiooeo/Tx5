@@ -57,6 +57,11 @@
       margin-bottom: 50px;
     }
 
+    .form-control {
+      width: 500px;
+      margin-top: 10px;
+    }
+
     .button {
       background: #78ad80;
       border: #ffffff00;
@@ -79,8 +84,8 @@
 
   <form class="wrap" method="post" action="/api/member" onsubmit="validateMember(event)">
     <div>
-      <label for="pass" style="font-size: large; margin-bottom: 10px;">비밀번호 (4자 이상)</label></br>
-      <input type="password" id="password" name="password" minlength="4" required />
+      <label for="pass" style="font-size: large; margin-bottom: 10px;">비밀번호를 입력하세요 (4자 이상)</label></br>
+      <input class="form-control" type="password" id="password" name="password" minlength="4" required />
     </div>
     <input class="button" type="submit" value="확인" />
   </form>

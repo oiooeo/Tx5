@@ -88,7 +88,7 @@
 
   <form class="wrap" method="post" action="/api/member" onsubmit="deleteMember(event)">
     <div class="mb-3">
-      <label for="pass">삭제하시려면 비밀번호를 입력하세요</label>
+      <label for="pass" style="font-size: large; margin-bottom: 10px;">비밀번호를 입력하세요 (4자 이상)</label>
       <input class="form-control" type="password" id="password" name="password" minlength="4" required />
     </div>
     <input class="button" type="submit" value="삭제" />
