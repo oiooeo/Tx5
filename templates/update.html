@@ -23,12 +23,24 @@
           id="image"
           name="image"
           accept=".jpg, .jpeg, .png"
-          multiple
+          style="
+            position: absolute;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            border: 0;
+          "
         />
-      </div>
-      <div>
-        <label for="name">Photo: </label>
-        <input type="text" name="photo_url" id="photo_url" />
+        <img
+          id="imagePreview"
+          style="width: 100px; height: 100px; object-fit: cover"
+          src="https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png"
+        />
+        <button type="button" onclick="selectImage()">사진 선택</button>
+        <button type="button" onclick="resetImage()">사진 삭제</button>
       </div>
       <div>
         <label for="name">MBTI: </label>
@@ -53,6 +65,31 @@
       <input type="submit" value="변경하기" />
     </form>
     <script>
+      const inputImage = document.querySelector("#image");
+      const imagePreview = document.querySelector("#imagePreview");
+
+      function selectImage() {
+        inputImage.click();
+      }
+      function changeImage(e) {
+        console.log("change");
+        const files = e.target.files;
+        if (files.length < 1) return resetImage();
+        const file = files[0];
+        if (file.size > 2097152) {
+          alert("2MB이하의 이미지를 선택해주세요.");
+          return resetImage();
+        }
+        imagePreview.src = URL.createObjectURL(file);
+      }
+      function resetImage() {
+        console.log("reset");
+        imagePreview.src =
+          "https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png";
+        inputImage.value = "";
+      }
+      inputImage.onchange = changeImage;
+
       window.onload = (e) => {
         listing();
       };
@@ -63,7 +100,7 @@
           const json = await res.json();
           const member = json["result"];
           document.querySelector("#name").value = member.name;
-          document.querySelector("#photo_url").value = member.photo_url;
+          document.querySelector("#imagePreview").src = member.photo_url;
           document.querySelector("#mbti").value = member.mbti;
           document.querySelector("#advantage").value = member.advantage;
           document.querySelector("#co_style").value = member.co_style;
