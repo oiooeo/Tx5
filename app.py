@@ -18,6 +18,7 @@ load_dotenv()
 # flask
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
+app.config['PERMANENT_SESSION_LIFETIME'] = 10
 # mongodb
 
 MONGODB_URI = os.getenv("MONGODB_URI")
@@ -161,7 +162,6 @@ def handle_member(id):
       try:
         password = request.form['password']
         member = member_col.find_one({'id':str(id)},{'_id':False})
-        print(member)
         ph.verify(member['password'], str(password))
         member_col.delete_one({'id':member['id']})
         session.clear()
