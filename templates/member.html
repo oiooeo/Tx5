@@ -1,116 +1,197 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+    <title>Tx5</title>
 
-  <title>Tx5</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap");
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
-
-    * {
-      font-family: 'IBM Plex Sans KR', sans-serif;
-      letter-spacing: 2px;
-    }
-
-    .mytitle {
-      width: 100%;
-      height: 160px;
-
-      background-color: #78ad80;
-      color: #ffffff;
-      font-size: xx-large;
-      font-weight: 500;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      margin-bottom: 50px;
-    }
-
-    #back_btn {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-image: url(https://i.postimg.cc/SsFvYypM/left-arrow-circle-regular-24.png);
-      width: 35px;
-      height: 35px;
-      background-position: center;
-      background-size: cover;
-    }
-
-    .wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 50px;
-    }
-
-    .form-control {
-      width: 500px;
-      margin-top: 10px;
-    }
-
-    .btn-outline-secondary {
-      margin-top: 20px;
-
-    }
-
-    .button {
-      background: #78ad80;
-      border: #ffffff00;
-      padding: 5px 15px;
-      margin-top: 10px;
-      border-radius: 20px;
-      color: #ffffff;
-      position: relative;
-      transition: all 0.4s ease;
-      cursor: pointer;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="mytitle">
-    <h1>𝐓 𝐱 𝟓</h1>
-  </div>
-
-  <form class="wrap" method="post" action="/api/member" onsubmit="deleteMember(event)">
-    <div class="mb-3">
-      <label for="pass" style="font-size: large; margin-bottom: 10px;">비밀번호를 입력하세요 (4자 이상)</label>
-      <input class="form-control" type="password" id="password" name="password" minlength="4" required />
-    </div>
-    <input class="button" type="submit" value="삭제" />
-  </form>
-
-  <script>
-    async function deleteMember(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      try {
-        const res = await fetch("/api/member/{{id}}", {
-          method: "DELETE",
-          body: formData,
-        });
-        const json = await res.json();
-        if (res.status == 200) window.location.href = "/";
-        else alert(json.error);
-      } catch (e) {
-        alert(e);
+      * {
+        font-family: "IBM Plex Sans KR", sans-serif;
+        letter-spacing: 2px;
       }
-    }
-  </script>
-</body>
 
+      .mytitle {
+        width: 100%;
+        height: 160px;
+
+        background-color: #78ad80;
+        color: #ffffff;
+        font-size: xx-large;
+        font-weight: 500;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin-bottom: 50px;
+      }
+
+      #back_btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-image: url(https://i.postimg.cc/SsFvYypM/left-arrow-circle-regular-24.png);
+        width: 35px;
+        height: 35px;
+        background-position: center;
+        background-size: cover;
+      }
+
+      .wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 50px;
+      }
+
+      .form-control {
+        width: 500px;
+        margin-top: 10px;
+      }
+
+      .btn-outline-secondary {
+        margin-top: 20px;
+      }
+
+      .button {
+        background: #78ad80;
+        border: #ffffff00;
+        padding: 5px 15px;
+        margin-top: 10px;
+        border-radius: 20px;
+        color: #ffffff;
+        position: relative;
+        transition: all 0.4s ease;
+        cursor: pointer;
+      }
+
+      #loader {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #00000024;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #loader.on {
+        display: flex;
+      }
+
+      #loader-svg path,
+      #loader-svg rect {
+        fill: #78ad80;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="mytitle">
+      <h1>𝐓 𝐱 𝟓</h1>
+    </div>
+
+    <form
+      class="wrap"
+      method="post"
+      action="/api/member"
+      onsubmit="deleteMember(event)"
+    >
+      <div class="mb-3">
+        <label for="pass" style="font-size: large; margin-bottom: 10px"
+          >비밀번호를 입력하세요 (4자 이상)</label
+        >
+        <input
+          class="form-control"
+          type="password"
+          id="password"
+          name="password"
+          minlength="4"
+          required
+        />
+      </div>
+      <input class="button" type="submit" value="삭제" />
+    </form>
+    <div id="loader">
+      <svg
+        version="1.1"
+        id="loader-svg"
+        xmlns="http://www.w3.org/2000/svg"
+        x="0px"
+        y="0px"
+        width="40px"
+        height="40px"
+        viewBox="0 0 50 50"
+        xml:space="preserve"
+      >
+        <path
+          fill="#000"
+          d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+        >
+          <animateTransform
+            attributeType="xml"
+            attributeName="transform"
+            type="rotate"
+            from="0 25 25"
+            to="360 25 25"
+            dur="0.6s"
+            repeatCount="indefinite"
+          />
+        </path>
+      </svg>
+    </div>
+    <script>
+      const loader = document.querySelector("#loader");
+
+      function onLoader() {
+        loader.classList.add("on");
+      }
+
+      function offLoader() {
+        loader.classList.remove("on");
+      }
+
+      async function deleteMember(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        onLoader();
+        try {
+          const res = await fetch("/api/member/{{id}}", {
+            method: "DELETE",
+            body: formData,
+          });
+          const json = await res.json();
+          offLoader();
+          if (res.status == 200) window.location.href = "/";
+          else alert(json.error);
+        } catch (e) {
+          alert(e);
+        }
+      }
+    </script>
+  </body>
 </html>
