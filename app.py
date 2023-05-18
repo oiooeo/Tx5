@@ -96,14 +96,17 @@ def get_all_or_create_member():
           photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
         else:
           photo_url = upload_image(id,image)
+        password = request.form['password']
+        if (len(password)<4):
+          raise InvalidPasswordError
+        password_hash = ph.hash(str(password))
         name = request.form['name']
         mbti = request.form['mbti'].upper()
         advantage = request.form['advantage']
         co_style = request.form['co_style']
         desc = request.form['desc']
         blog_url = request.form['blog_url']
-        password = request.form['password']
-        password_hash = ph.hash(str(password))
+       
         doc = {
             'id' : id,
             'name': name,
@@ -116,7 +119,7 @@ def get_all_or_create_member():
             'password' : password_hash
         }
         db['member'].insert_one(doc)
-        return make_response(jsonify({'url': '/member/'+id}),200)
+        return make_response(jsonify({'meg': 'success'}),200)
       except Exception as e:
         return make_response(jsonify({'meg': str(e)}),404)
 
@@ -178,7 +181,9 @@ def validate_member(id):
     except Exception as e:
       return make_response(jsonify({'meg': str(e)}),404)
        
-
+class InvalidPasswordError(Exception):    
+    def __init__(self):
+        super().__init__('잘못된 비밀번호입니다.')
 
 class ImageUploadError(Exception):    
     def __init__(self):

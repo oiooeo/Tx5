@@ -47,12 +47,12 @@
         <input type="text" name="blog_url" id="blog_url" />
       </div>
       <div>
-        <label for="pass">Password (8 characters minimum):</label>
+        <label for="pass">Password (4 characters minimum):</label>
         <input
           type="password"
           id="password"
           name="password"
-          minlength="8"
+          minlength="4"
           required
         />
       </div>
@@ -70,9 +70,10 @@
           });
           const data = await res.json();
           const url = data.url;
-          if (url) {
-            window.location.href = url;
+          if (res.status === 200) {
+            window.location.replace("/");
           } else {
+            console.log(data.meg);
             throw new Error("멤버 생성에 실패했습니다.");
           }
         } catch (e) {
