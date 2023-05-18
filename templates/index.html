@@ -164,7 +164,7 @@
             margin-top: 20px;
         }
 
-        .modal .document{
+        .modal .document {
             list-style-type: none;
             padding: 0;
             margin-left: 20px;
@@ -296,12 +296,12 @@
                                 <img src="${member.photo_url}" />
                               </div>
                               <ul class="document">
-                                <li class="MBTI">MBTI | ${member.mbti}</li></br>
-                                <li class="blog">블로그 주소 | ${member.blog_url}</li></br>
-                                <li class="introduce">내 소개 | ${member.desc}</li></br>
-                                <li class="pros">장점 | ${member.advantage}</li></br>
-                                <li class="myStyle">협업스타일 | ${member.co_style}</li></br>
-                              </ul>
+                                <li class="MBTI"><span style="font-weight:bold;">MBTI |</span> ${member.mbti}</li></br>
+                                <li class="blog"><span style="font-weight:bold;">블로그 주소 |</span> ${member.blog_url}</li></br>
+                                <li class="introduce"><span style="font-weight:bold;">내 소개 |</span> ${member.desc}</li></br>
+                                <li class="pros"><span style="font-weight:bold;">장점 |</span> ${member.advantage}</li></br>
+                                <li class="myStyle"><span style="font-weight:bold;">협업스타일 |</span> ${member.co_style}</li></br>
+                            </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
                             <a class="delete-btn js-delete-modal" role="button" href="/member/${member.id}"></a>
