@@ -200,7 +200,6 @@
         function offLoader() {
             loader.classList.remove('on')
         }
-
         function selectImage() {
             inputImage.click();
         }
@@ -226,7 +225,10 @@
 
         inputImage.onchange = changeImage;
 
+        
+
         async function createMember(event) {
+
             event.preventDefault();
             const formData = new FormData(event.target);
             onLoader();
