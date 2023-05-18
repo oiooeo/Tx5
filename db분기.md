@@ -2,7 +2,7 @@
 
 1. python -m venv venv
 2. source ./venv/Scripts/activate (or) source ./venv/bin/activate
-3. pip install flask pymongo python-dotenv argon2-cffi boto3
+3. pip install flask pymongo python-dotenv argon2-cffi boto3 certifi
 
 ## SiteMap
 
@@ -10,16 +10,16 @@
 | -------------------- | -------------- |
 | 메인페이지           | /              |
 | 멤버 생성 페이지     | /manage/create |
-| 멤버 업데이트 페이지 | /manage/{name} |
-| 멤버 페이지          | /member/{name} |
+| 멤버 업데이트 페이지 | /manage/{id}   |
+| 멤버 페이지          | /member/{id}   |
 
 ## API
 
-| 경로                   | HTTP   | 설명                                    |
-| ---------------------- | ------ | --------------------------------------- |
-| /api/member            | GET    | 모든 멤버 가져오기                      |
-| /api/member            | POST   | 새로운 멤버 생성하기                    |
-| /api/member/{name}     | GET    | 단일 멤버 가져오기                      |
-| /api/member/{name}     | PUT    | 단일 멤버 업데이트하기                  |
-| /api/member/{name}     | DELETE | 단일 멤버 삭제하기                      |
-| /api/validation/{name} | POST   | 세션을 통해 멤버 업데이트 권한 가져오기 |
+| 경로                 | HTTP   | 설명                                    | 성공                                                                 | 실패                                                                                                              |
+| -------------------- | ------ | --------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| /api/member          | GET    | 모든 멤버 가져오기                      | {'result': allMember,'meg': '데이터를 성공적으로 불러왔습니다.'},200 | {'error': '데이터를 찾을 수 없습니다.'}),404                                                                      |
+| /api/member          | POST   | 새로운 멤버 생성하기                    | {'meg': '회원가입이 완료되었습니다.'},200                            | {'error': '잘못된 비밀번호입니다.'}),400<br />{'error': '회원가입에 실패했습니다.'}),404                          |
+| /api/member/{id}     | GET    | 단일 멤버 가져오기                      | {'result': member},200                                               | {'error': '해당 멤버의정보를 찾을 수 없습니다.'}),404                                                             |
+| /api/member/{id}     | PUT    | 단일 멤버 업데이트하기                  | {'meg': '변경사항을 성공적으로 저장하였습니다.'},200                 | {'error': '서버 오류로 인해 변경사항 저장을 실패하였습니다.'}),500                                                |
+| /api/member/{id}     | DELETE | 단일 멤버 삭제하기                      | {'meg': '멤버를 성공적으로 삭제하였습니다.'},200                     | {'error': '비밀번호가 일치하지 않습니다.'}),403<br />{'error': '서버 오류로 인해 멤버 삭제에 실패했습니다.'}),500 |
+| /api/validation/{id} | POST   | 세션을 통해 멤버 업데이트 권한 가져오기 | {'meg': '인증에 성공하였습니다.'},200                                | {'error': '비밀번호가 일치하지 않습니다.'}),403                                                                   |

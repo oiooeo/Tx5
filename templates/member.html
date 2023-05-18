@@ -100,7 +100,9 @@
       onsubmit="deleteMember(event)"
     >
       <div class="mb-3">
-        <label for="pass">삭제하시려면 비밀번호를 입력하세요</label>
+        <label for="pass" style="font-size: large; margin-bottom: 10px"
+          >비밀번호를 입력하세요 (4자 이상)</label
+        >
         <input
           class="form-control"
           type="password"
@@ -122,7 +124,9 @@
             method: 'DELETE',
             body: formData,
           });
+          const json = await res.json();
           if (res.status == 200) window.location.href = '/';
+          else alert(json.error);
         } catch (e) {
           alert(e);
         }

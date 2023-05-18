@@ -290,11 +290,11 @@
         try {
           const res = await fetch('/api/member');
           const json = await res.json();
-          console.log(json);
           list.innerHTML = '';
-          json['result'].map((member) => {
-            const card = document.createElement('li');
-            temp_html = `
+          if (res.status === 200) {
+            json['result'].map((member) => {
+              const card = document.createElement('li');
+              temp_html = `
                         <div class="container">
                           <a class="btn js-click-modal">
                             <div class="card h-100">
@@ -319,7 +319,7 @@
                                 <li class="introduce"><span style="font-weight:bold;">내 소개 |</span> ${member.desc}</li></br>
                                 <li class="pros"><span style="font-weight:bold;">장점 |</span> ${member.advantage}</li></br>
                                 <li class="myStyle"><span style="font-weight:bold;">협업스타일 |</span> ${member.co_style}</li></br>
-                              </ul>
+                            </ul>
                             </div>
                             <a class="close-btn js-close-modal">Close</a>
                             <a class="delete-btn js-delete-modal" role="button" href="/member/${member.id}"></a>
@@ -327,27 +327,30 @@
                           </div>
                         </div>
                         `;
-            card.innerHTML = temp_html;
-            // 컨테이너 생성 및 카드 추가
-            const container = document.createElement('li');
-            container.classList.add('card-container');
-            container.appendChild(card);
-            list.appendChild(container);
+              card.innerHTML = temp_html;
+              // 컨테이너 생성 및 카드 추가
+              const container = document.createElement('li');
+              container.classList.add('card-container');
+              container.appendChild(card);
+              list.appendChild(container);
 
-            $('.js-click-modal').click(function () {
-              const container = $(this).closest('.card-container');
-              container.addClass('modal-open');
-              container.siblings().fadeOut(300);
-            });
+              $('.js-click-modal').click(function () {
+                const container = $(this).closest('.card-container');
+                container.addClass('modal-open');
+                container.siblings().fadeOut(300);
+              });
 
-            $('.js-close-modal').click(function () {
-              const container = $(this).closest('.card-container');
-              container.removeClass('modal-open');
-              setTimeout(function () {
-                container.siblings().fadeIn(300);
-              }, 100);
+              $('.js-close-modal').click(function () {
+                const container = $(this).closest('.card-container');
+                container.removeClass('modal-open');
+                setTimeout(function () {
+                  container.siblings().fadeIn(300);
+                }, 100);
+              });
             });
-          });
+          } else {
+            alert(json.error);
+          }
         } catch (e) {
           alert(e);
         }
