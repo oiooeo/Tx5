@@ -139,6 +139,8 @@ def handle_member(id):
         print('/api/member/<id> [GET] Error: ',str(e))
         return make_response(jsonify({'error': '해당 멤버의 정보를 찾을 수 없습니다.'}),404)
     elif request.method == 'PUT':
+      if 'is_reset_image' in request.form:
+        photo_url = 'https://intro-app-profile-image.s3.ap-northeast-2.amazonaws.com/No-Image-Placeholder.png';
       image = request.files['image']
       if not (is_empty_file(image)):
         photo_url = upload_image(id,image)
